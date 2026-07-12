@@ -16,7 +16,7 @@ A solução combina:
 - mapas, indicadores, GeoJSON e convergência;
 - integração segura com LLM para instruções, relatórios e perguntas;
 - API FastAPI e interface web;
-- 112 testes automatizados e 94,32% de cobertura.
+- 112 testes automatizados e 94,00% de cobertura.
 
 Nos experimentos iniciais, a melhor configuração genética média reduziu o custo
 composto em 25,85% no cenário pequeno e 27,75% no médio em relação ao melhor
@@ -258,9 +258,11 @@ inclui economia de distância, custo e tempo estimado calculada pelo sistema, se
 delegar aritmética à LLM. A avaliação humana possui script próprio com notas de
 clareza, utilidade, segurança e fundamentação.
 
-Os artefatos em `reports/llm` foram gerados pelo fallback determinístico. Uma
-execução real do Qwen pelo Ollama deve ser realizada e revisada pelo grupo antes
-da gravação. Consulte
+Os exemplos diretamente em `reports/llm` foram gerados pelo fallback
+determinístico. A execução real do Qwen está versionada em
+`reports/llm/ollama/pequeno.json`, com validações estruturais aprovadas. A
+avaliação humana correspondente, registrada por Caio, obteve média 5,0 e decisão
+`aprovado` em `reports/llm/ollama/pequeno.avaliacao.json`. Consulte
 [Integração com LLM](integracao-llm.md) e
 [Validação final antes do vídeo](demonstracao-final.md).
 
@@ -287,7 +289,7 @@ O pipeline local e o GitHub Actions executam:
 - cobertura mínima de 90%;
 - `pip check`.
 
-Estado documentado desta entrega: 112 testes aprovados e 94,32% de cobertura. Os
+Estado documentado desta entrega: 112 testes aprovados e 94,00% de cobertura. Os
 testes da API usam transporte ASGI; testes de LLM não acessam rede. Consulte
 [Testes e qualidade](testes-e-qualidade.md).
 
@@ -328,19 +330,16 @@ Nenhum teste depende de API externa ou segredo.
 - sem autenticação e autorização;
 - configuração de nuvem validada localmente, mas ainda sem provisionamento em
   projeto externo;
-- sem avaliação humana registrada da LLM;
-- sem execução real do Ollama versionada;
 - cenário crítico ainda não incluído na matriz experimental completa.
 
 ## 14. Próximos passos
 
-1. executar avaliação humana cega das instruções da LLM;
-2. adicionar tempo real ou matriz viária;
-3. incluir cenário crítico na rodada final;
-4. persistir soluções e mover execução para fila;
-5. adicionar autenticação e auditoria;
-6. provisionar a configuração Cloud Run e registrar evidências da implantação;
-7. gravar o vídeo seguindo o roteiro versionado.
+1. adicionar tempo real ou matriz viária;
+2. incluir cenário crítico em uma futura matriz experimental;
+3. persistir soluções e mover execução para fila;
+4. adicionar autenticação e auditoria;
+5. provisionar a configuração Cloud Run e registrar evidências da implantação;
+6. gravar o vídeo seguindo o roteiro versionado.
 
 ## 15. Conclusão
 

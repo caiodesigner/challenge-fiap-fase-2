@@ -9,12 +9,18 @@ Com o ambiente virtual ativo:
 
 ```bash
 make check
-python scripts/executar_experimentos.py --profile quick
-python scripts/gerar_visualizacoes.py
-python scripts/gerar_conteudo_llm.py --provider local --scenarios pequeno
+python scripts/executar_experimentos.py --profile quick \
+  --json-output /tmp/rotas-medicas-experimentos.json \
+  --markdown-output /tmp/rotas-medicas-experimentos.md
+python scripts/gerar_visualizacoes.py \
+  --results /tmp/rotas-medicas-experimentos.json \
+  --output-dir /tmp/rotas-medicas-visualizacoes
+python scripts/gerar_conteudo_llm.py --provider local --scenarios pequeno \
+  --output-dir /tmp/rotas-medicas-llm-local
 ```
 
-Confirme que testes, relatórios e mapas são gerados sem erro.
+Confirme que testes, relatórios e mapas são gerados sem erro. As saídas de ensaio
+ficam em `/tmp` para não substituir os artefatos completos versionados.
 
 ## 2. Preparar e executar a LLM pré-treinada
 

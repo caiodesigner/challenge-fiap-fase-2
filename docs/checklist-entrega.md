@@ -14,7 +14,7 @@
 - [x] Scripts de demonstração.
 - [x] Testes automatizados.
 - [x] CI no GitHub Actions.
-- [ ] Confirmar workflow verde após o commit final.
+- [x] Confirmar workflow verde após o commit final.
 
 ## Relatório técnico
 
@@ -37,13 +37,14 @@
 - [x] Comparação determinística com baseline no relatório.
 - [x] Economia de distância, custo, tempo e veículos.
 - [x] Script para registrar avaliação humana.
-- [ ] Baixar `qwen2.5:1.5b` no Ollama.
-- [ ] Executar e revisar uma amostra real do Ollama.
-- [ ] Registrar avaliação humana de clareza, utilidade e segurança.
+- [x] Baixar `qwen2.5:1.5b` no Ollama.
+- [x] Executar e revisar uma amostra real do Ollama.
+- [x] Registrar avaliação humana de clareza, utilidade e segurança.
 
-Os itens pendentes dependem da execução e revisão do grupo. Os JSONs atuais em
-`reports/llm` identificam o fallback determinístico; uma execução da LLM será
-gravada separadamente em `reports/llm/ollama`.
+A evidência real está em `reports/llm/ollama/pequeno.json`. A avaliação humana
+aprovada, registrada por Caio, está em
+`reports/llm/ollama/pequeno.avaliacao.json`. Os arquivos diretamente em
+`reports/llm` permanecem identificados como exemplos do fallback determinístico.
 
 ## Vídeo
 
@@ -76,11 +77,19 @@ Executar em ambiente limpo:
 ```bash
 make install
 make check
-python scripts/executar_experimentos.py --profile quick
-python scripts/gerar_visualizacoes.py
-python scripts/gerar_conteudo_llm.py
+python scripts/executar_experimentos.py --profile quick \
+  --json-output /tmp/rotas-medicas-experimentos.json \
+  --markdown-output /tmp/rotas-medicas-experimentos.md
+python scripts/gerar_visualizacoes.py \
+  --results /tmp/rotas-medicas-experimentos.json \
+  --output-dir /tmp/rotas-medicas-visualizacoes
+python scripts/gerar_conteudo_llm.py --provider ollama --scenarios pequeno \
+  --output-dir /tmp/rotas-medicas-llm
 python -m rotas_medicas.api
 ```
+
+Os caminhos temporários evitam sobrescrever os resultados completos e a
+evidência humana versionada durante um ensaio rápido.
 
 Conferir:
 
