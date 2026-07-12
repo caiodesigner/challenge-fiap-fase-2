@@ -8,12 +8,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:")
 REQUIRED_DELIVERABLES = (
+    "Dockerfile",
     "docs/relatorio-tecnico.md",
     "docs/arquitetura.md",
     "docs/api.md",
+    "docs/evolucao-codigo-base.md",
     "docs/roteiro-video.md",
     "docs/checklist-entrega.md",
     "docs/indice.md",
+    "docs/nuvem.md",
+    "infra/terraform/main.tf",
+    "infra/terraform/outputs.tf",
+    "infra/terraform/variables.tf",
+    "infra/terraform/versions.tf",
 )
 
 

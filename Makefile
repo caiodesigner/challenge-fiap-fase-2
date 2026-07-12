@@ -1,4 +1,4 @@
-.PHONY: install format lint type test check run experiments visualizations llm-demo
+.PHONY: install format lint type test check run experiments visualizations llm-demo container
 
 PYTHON := .venv/bin/python
 
@@ -34,3 +34,6 @@ visualizations:
 
 llm-demo:
 	$(PYTHON) scripts/gerar_conteudo_llm.py
+
+container:
+	docker build -t rotas-medicas:local .

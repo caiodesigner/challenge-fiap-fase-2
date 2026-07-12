@@ -30,7 +30,13 @@ from rotas_medicas.application import (
 from rotas_medicas.genetic import GeneticConfig
 from rotas_medicas.llm import LLMProvider, OpenAIResponsesProvider, RuleBasedProvider
 
-DEFAULT_DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+
+def data_dir_from_environment() -> Path:
+    """Resolve cenários empacotados ou montados no ambiente de execução."""
+    return Path(os.getenv("DATA_DIR", Path(__file__).resolve().parents[3] / "data"))
+
+
+DEFAULT_DATA_DIR = data_dir_from_environment()
 
 
 def _provider_from_environment() -> LLMProvider:

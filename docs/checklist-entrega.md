@@ -54,12 +54,16 @@ o provedor `local`.
 
 ## Nuvem opcional
 
-- [ ] Decidir se o grupo buscará a pontuação extra de nuvem.
-- [ ] Se sim, containerizar a aplicação.
-- [ ] Se sim, criar IaC e documentação de implantação.
-- [ ] Se sim, adicionar observabilidade e gestão de segredos.
+- [x] Decidir se o grupo buscará a pontuação extra de nuvem.
+- [x] Containerizar a aplicação.
+- [x] Criar IaC e documentação de implantação.
+- [x] Adicionar health checks, observabilidade e gestão de segredos.
+- [x] Adicionar validação da imagem e do Terraform no CI.
+- [ ] Provisionar os recursos em um projeto Google Cloud autorizado.
+- [ ] Registrar a URL e as evidências da implantação.
 
-A nuvem é opcional segundo o enunciado e não integra a entrega técnica atual.
+A configuração está completa e reproduzível. O provisionamento permanece manual
+porque exige credenciais, faturamento e autorização do proprietário do projeto.
 
 ## Validação final
 
@@ -88,4 +92,4 @@ Conferir:
 
 - Repositório: `https://github.com/caiodesigner/challenge-fiap-fase-2`
 - Vídeo: **pendente**
-- Implantação em nuvem: **não aplicável nesta versão**
+- Implantação em nuvem: **configuração pronta; URL pendente de provisionamento**

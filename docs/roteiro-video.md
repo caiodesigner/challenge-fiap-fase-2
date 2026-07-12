@@ -56,10 +56,14 @@ Destacar:
 
 ## 3:15–5:15 — Algoritmo genético
 
-Mostrar rapidamente os módulos `genetic`.
+Abrir [Evolução do código-base](evolucao-codigo-base.md) e mostrar rapidamente
+os módulos `genetic`.
 
 Explicar:
 
+- o código-base partia de permutação única, distância euclidiana, OX, mutação e
+  elitismo;
+- esses conceitos foram preservados e refatorados de TSP para VRP médico;
 - cromossomo como lista de rotas por veículo;
 - população inicial por seed;
 - seleção por torneio e elitismo;
@@ -158,7 +162,7 @@ Mencionar objetivamente:
 - Haversine, sem ruas e trânsito real;
 - armazenamento em memória;
 - dados sintéticos;
-- nuvem opcional não implementada.
+- configuração de nuvem implementada, com provisionamento externo pendente.
 
 Fechar reforçando:
 

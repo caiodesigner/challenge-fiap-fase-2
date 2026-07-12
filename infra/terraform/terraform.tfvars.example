@@ -1,0 +1,9 @@
+project_id      = "meu-projeto-gcp"
+region          = "southamerica-east1"
+service_name    = "rotas-medicas"
+container_image = "southamerica-east1-docker.pkg.dev/meu-projeto-gcp/rotas-medicas/app:SUBSTITUA_PELO_SHA"
+
+allow_unauthenticated = true
+enable_openai         = false
+openai_model          = "gpt-5.6"
+max_instances         = 2

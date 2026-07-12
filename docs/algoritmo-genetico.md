@@ -10,6 +10,18 @@ incorporadas pela função de custo na etapa de fitness e restrições.
 Essa separação permite testar os operadores de forma isolada e comparar
 diferentes funções de avaliação sem alterar o algoritmo genético.
 
+## Origem e evolução
+
+O código-base do challenge é
+[`sergiopolimante/genetic_algorithm_tsp`](https://github.com/sergiopolimante/genetic_algorithm_tsp),
+no commit analisado `1be73eccfd110a3314cc28dae5a8e78a4dcca9bb`. Foram
+preservados os conceitos de permutação, população aleatória, Order Crossover,
+mutação, elitismo e minimização. A implementação foi refatorada para separar o
+motor da interface Pygame e estendida de uma rota TSP para múltiplas rotas VRP.
+
+A comparação de estruturas, operadores, limitações corrigidas e licença está em
+[Evolução do código-base](evolucao-codigo-base.md).
+
 ## Representação genética
 
 O cromossomo é uma tupla imutável de rotas:

@@ -60,10 +60,12 @@ API em `http://127.0.0.1:8000/docs`.
 ## Entregáveis
 
 - [Relatório técnico consolidado](docs/relatorio-tecnico.md)
+- [Evolução do código-base de TSP](docs/evolucao-codigo-base.md)
 - [Arquitetura da solução](docs/arquitetura.md)
 - [Guia da API](docs/api.md)
 - [Roteiro do vídeo de demonstração](docs/roteiro-video.md)
 - [Checklist de entrega](docs/checklist-entrega.md)
+- [Implantação opcional no Google Cloud](docs/nuvem.md)
 - [Índice completo da documentação](docs/indice.md)
 
 ## Estrutura
@@ -80,9 +82,9 @@ src/rotas_medicas/
 
 data/                # Dados de entrada e cenários de demonstração
 docs/                # Especificações e arquitetura
-notebooks/           # Análises e demonstrações exploratórias
 scripts/             # Comandos operacionais reproduzíveis
 tests/               # Testes automatizados
+infra/terraform/     # Infraestrutura Google Cloud como código
 ```
 
 ## Documentação por etapa
@@ -90,9 +92,11 @@ tests/               # Testes automatizados
 - [Definição do problema e critérios](docs/definicao-do-problema.md)
 - [Dados e cenários de demonstração](data/README.md)
 - [Algoritmo genético](docs/algoritmo-genetico.md)
+- [Evolução do código-base de TSP](docs/evolucao-codigo-base.md)
 - [Fitness e restrições](docs/fitness-e-restricoes.md)
 - [Baselines e experimentos](docs/baselines-e-experimentos.md)
 - [Visualizações](docs/visualizacoes.md)
 - [Integração com LLM](docs/integracao-llm.md)
 - [Interface da solução](docs/interface-da-solucao.md)
 - [Testes e qualidade](docs/testes-e-qualidade.md)
+- [Nuvem — opcional](docs/nuvem.md)

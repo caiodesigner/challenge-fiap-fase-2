@@ -152,6 +152,15 @@ custo injetável.
 
 ## Decisões arquiteturais
 
+### Refatoração do código-base
+
+O TSP original concentra evolução, dados e Pygame em scripts e usa coordenadas
+como genes. A solução mantém o fluxo genético essencial, mas separa domínio,
+motor, fitness, aplicação e visualização. IDs substituem coordenadas nos genes,
+permitindo associar demanda e prioridade sem acoplar o algoritmo ao contexto
+médico. A derivação completa está em
+[Evolução do código-base](evolucao-codigo-base.md).
+
 ### Cromossomo multirrota imutável
 
 Uma tupla externa representa veículos e cada tupla interna representa a ordem
@@ -194,5 +203,22 @@ Para produção, a arquitetura pode evoluir sem alterar o domínio:
 - múltiplos depósitos e entregas fracionadas;
 - implantação containerizada com múltiplas réplicas.
 
-Implementação em nuvem e infraestrutura como código não fazem parte da versão
-atual, conforme a natureza opcional desse item no enunciado.
+## Implantação em nuvem
+
+A entrega opcional utiliza uma imagem Docker no Google Cloud Run, Artifact
+Registry e Secret Manager, provisionados por Terraform. A conta de serviço do
+runtime tem acesso somente ao segredo da aplicação. Probes consultam `/health`,
+e logs e métricas de plataforma são capturados pelo Google Cloud.
+
+```mermaid
+flowchart LR
+    USER[Operador] -->|HTTPS| RUN[Cloud Run]
+    RUN --> APP[FastAPI]
+    REG[Artifact Registry] -->|imagem imutável| RUN
+    RUN -.-> SECRET[Secret Manager]
+    RUN --> LOG[Cloud Logging]
+    APP -.-> OPENAI[OpenAI]
+```
+
+Consulte o [guia de implantação](nuvem.md) para provisionamento, gestão de
+segredos, observabilidade, rollback e remoção dos recursos.

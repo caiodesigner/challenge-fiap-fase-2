@@ -108,10 +108,15 @@ entre os veículos.
 A execução termina por custo-alvo, estagnação ou máximo de gerações. O resultado
 registra motivo, melhor solução e histórico de melhor, média e pior fitness.
 
-O enunciado menciona um código base de TSP, mas esse artefato não foi fornecido
-no PDF nem disponibilizado no workspace deste projeto. A implementação foi
-construída a partir dos requisitos descritos e documenta explicitamente sua
-extensão de TSP para CVRP. Consulte [Algoritmo genético](algoritmo-genetico.md).
+O código-base indicado é o repositório
+[`sergiopolimante/genetic_algorithm_tsp`](https://github.com/sergiopolimante/genetic_algorithm_tsp),
+analisado no commit `1be73eccfd110a3314cc28dae5a8e78a4dcca9bb`. A solução
+preserva população aleatória, permutação, OX, mutação, elitismo e minimização da
+fitness, mas reestrutura esses conceitos para um VRP médico testável. A
+transformação inclui IDs de entrega, depósito explícito, múltiplas rotas,
+Haversine, torneio, novas mutações e restrições operacionais. Consulte
+[Evolução do código-base](evolucao-codigo-base.md) e
+[Algoritmo genético](algoritmo-genetico.md).
 
 ## 5. Fitness e restrições
 
@@ -315,7 +320,8 @@ Nenhum teste depende de API externa ou segredo.
 - estado da API somente em memória;
 - otimização dentro da requisição HTTP;
 - sem autenticação e autorização;
-- sem nuvem ou IaC;
+- configuração de nuvem validada localmente, mas ainda sem provisionamento em
+  projeto externo;
 - sem avaliação humana registrada da LLM;
 - sem execução real da OpenAI versionada;
 - cenário crítico ainda não incluído na matriz experimental completa.
@@ -327,7 +333,7 @@ Nenhum teste depende de API externa ou segredo.
 3. incluir cenário crítico na rodada final;
 4. persistir soluções e mover execução para fila;
 5. adicionar autenticação e auditoria;
-6. containerizar e avaliar implantação em nuvem;
+6. provisionar a configuração Cloud Run e registrar evidências da implantação;
 7. gravar o vídeo seguindo o roteiro versionado.
 
 ## 15. Conclusão
