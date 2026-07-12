@@ -13,3 +13,9 @@ DATA_PATH = Path(__file__).resolve().parents[1] / "data"
 def small_problem() -> RoutingProblem:
     """Carrega o cenário pequeno validado e versionado."""
     return load_scenario(DATA_PATH / "cenario_pequeno.json")
+
+
+@pytest.fixture
+def anyio_backend() -> str:
+    """Executa testes ASGI somente no backend asyncio disponível."""
+    return "asyncio"

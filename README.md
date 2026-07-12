@@ -4,9 +4,9 @@ Projeto do Tech Challenge — Fase 2 da FIAP para otimizar a distribuição de
 medicamentos e insumos por meio de algoritmos genéticos e produzir instruções e
 relatórios com apoio de LLMs.
 
-O repositório contém a definição do problema, cenários sintéticos e o motor do
-algoritmo genético. A função de fitness e as demais funcionalidades de negócio
-serão incorporadas nas próximas etapas.
+O repositório contém uma solução executável com cenários sintéticos, algoritmo
+genético, restrições operacionais, experimentos, mapas, integração com LLM e
+interface web.
 
 ## Requisitos
 
@@ -42,11 +42,20 @@ Para aplicar a formatação automaticamente:
 python -m ruff format .
 ```
 
+## Executar a aplicação
+
+```bash
+python -m rotas_medicas.api
+```
+
+A interface estará disponível em `http://127.0.0.1:8000` e a documentação da
+API em `http://127.0.0.1:8000/docs`.
+
 ## Estrutura
 
 ```text
 src/rotas_medicas/
-├── api/             # Interfaces HTTP futuras
+├── api/             # API FastAPI e interface web
 ├── application/     # Orquestração dos casos de uso
 ├── domain/          # Entidades e regras do domínio
 ├── genetic/         # Algoritmo genético e operadores
@@ -70,3 +79,4 @@ tests/               # Testes automatizados
 - [Baselines e experimentos](docs/baselines-e-experimentos.md)
 - [Visualizações](docs/visualizacoes.md)
 - [Integração com LLM](docs/integracao-llm.md)
+- [Interface da solução](docs/interface-da-solucao.md)
