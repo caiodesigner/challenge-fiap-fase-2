@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rotas otimizadas — Cenário pequeno</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    html, body, #map { height: 100%; margin: 0; font-family: system-ui, sans-serif; }
+    .summary { position: absolute; z-index: 1000; top: 16px; right: 16px;
+      width: 230px; padding: 14px; border-radius: 10px; background: #fffffff2;
+      box-shadow: 0 4px 18px #0003; color: #172033; }
+    .summary h1 { margin: 0 0 10px; font-size: 16px; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .metric { padding: 8px; border-radius: 6px; background: #eef2ff; }
+    .metric span { display: block; color: #64748b; font-size: 11px; }
+    .metric strong { font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <aside class="summary">
+    <h1>Rotas otimizadas — Cenário pequeno</h1>
+    <div class="metrics" id="metrics"></div>
+  </aside>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const routes = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.633308, -23.55052]}, "properties": {"feature_type": "deposito", "id": "DEP-001", "name": "Centro de Distribuição Hospitalar Central", "popup": "<strong>Centro de Distribuição Hospitalar Central<\/strong><br>Depósito"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.625161, -23.541826]}, "properties": {"feature_type": "entrega", "id": "ENT-001", "name": "Unidade de saúde fictícia 01", "vehicle_id": "VEI-001", "route_index": 0, "stop": 1, "priority": "critica", "demand": 5.0, "color": "#2563eb", "priority_color": "#b91c1c", "popup": "<strong>Unidade de saúde fictícia 01<\/strong><br>Parada 1 · Veículo de distribuição 01<br>Prioridade: critica<br>Demanda: 5"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.637705, -23.527166]}, "properties": {"feature_type": "entrega", "id": "ENT-002", "name": "Unidade de saúde fictícia 02", "vehicle_id": "VEI-001", "route_index": 0, "stop": 2, "priority": "alta", "demand": 7.0, "color": "#2563eb", "priority_color": "#ea580c", "popup": "<strong>Unidade de saúde fictícia 02<\/strong><br>Parada 2 · Veículo de distribuição 01<br>Prioridade: alta<br>Demanda: 7"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.646936, -23.536529]}, "properties": {"feature_type": "entrega", "id": "ENT-003", "name": "Domicílio fictício 03", "vehicle_id": "VEI-001", "route_index": 0, "stop": 3, "priority": "normal", "demand": 4.0, "color": "#2563eb", "priority_color": "#2563eb", "popup": "<strong>Domicílio fictício 03<\/strong><br>Parada 3 · Veículo de distribuição 01<br>Prioridade: normal<br>Demanda: 4"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.64558, -23.549113]}, "properties": {"feature_type": "entrega", "id": "ENT-004", "name": "Unidade de saúde fictícia 04", "vehicle_id": "VEI-001", "route_index": 0, "stop": 4, "priority": "baixa", "demand": 6.0, "color": "#2563eb", "priority_color": "#64748b", "popup": "<strong>Unidade de saúde fictícia 04<\/strong><br>Parada 4 · Veículo de distribuição 01<br>Prioridade: baixa<br>Demanda: 6"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-46.633308, -23.55052], [-46.625161, -23.541826], [-46.637705, -23.527166], [-46.646936, -23.536529], [-46.64558, -23.549113], [-46.633308, -23.55052]]}, "properties": {"feature_type": "rota", "vehicle_id": "VEI-001", "vehicle_name": "Veículo de distribuição 01", "route_index": 0, "color": "#2563eb", "stops": 4}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.648596, -23.563418]}, "properties": {"feature_type": "entrega", "id": "ENT-005", "name": "Unidade de saúde fictícia 05", "vehicle_id": "VEI-002", "route_index": 1, "stop": 1, "priority": "critica", "demand": 5.0, "color": "#dc2626", "priority_color": "#b91c1c", "popup": "<strong>Unidade de saúde fictícia 05<\/strong><br>Parada 1 · Veículo de distribuição 02<br>Prioridade: critica<br>Demanda: 5"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.636124, -23.574888]}, "properties": {"feature_type": "entrega", "id": "ENT-006", "name": "Domicílio fictício 06", "vehicle_id": "VEI-002", "route_index": 1, "stop": 2, "priority": "alta", "demand": 7.0, "color": "#dc2626", "priority_color": "#ea580c", "popup": "<strong>Domicílio fictício 06<\/strong><br>Parada 2 · Veículo de distribuição 02<br>Prioridade: alta<br>Demanda: 7"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.626462, -23.560242]}, "properties": {"feature_type": "entrega", "id": "ENT-007", "name": "Unidade de saúde fictícia 07", "vehicle_id": "VEI-002", "route_index": 1, "stop": 3, "priority": "normal", "demand": 4.0, "color": "#dc2626", "priority_color": "#2563eb", "popup": "<strong>Unidade de saúde fictícia 07<\/strong><br>Parada 3 · Veículo de distribuição 02<br>Prioridade: normal<br>Demanda: 4"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-46.612334, -23.554001]}, "properties": {"feature_type": "entrega", "id": "ENT-008", "name": "Unidade de saúde fictícia 08", "vehicle_id": "VEI-002", "route_index": 1, "stop": 4, "priority": "baixa", "demand": 6.0, "color": "#dc2626", "priority_color": "#64748b", "popup": "<strong>Unidade de saúde fictícia 08<\/strong><br>Parada 4 · Veículo de distribuição 02<br>Prioridade: baixa<br>Demanda: 6"}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-46.633308, -23.55052], [-46.648596, -23.563418], [-46.636124, -23.574888], [-46.626462, -23.560242], [-46.612334, -23.554001], [-46.633308, -23.55052]]}, "properties": {"feature_type": "rota", "vehicle_id": "VEI-002", "vehicle_name": "Veículo de distribuição 02", "route_index": 1, "color": "#dc2626", "stops": 4}}]};
+    const summary = {"distance": "17.01 km", "cost": "1.2742", "vehicles": 2, "status": "Viável"};
+    const map = L.map('map');
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    const layer = L.geoJSON(routes, {
+      style: feature => ({ color: feature.properties.color,
+        weight: 4, opacity: 0.8 }),
+      pointToLayer: (feature, latlng) => {
+        if (feature.properties.feature_type === 'deposito') {
+          return L.circleMarker(latlng, { radius: 10, color: '#111827',
+            fillColor: '#facc15', fillOpacity: 1, weight: 3 });
+        }
+        return L.circleMarker(latlng, { radius: 7, color: feature.properties.color,
+          fillColor: feature.properties.priority_color,
+          fillOpacity: 0.95, weight: 3 });
+      },
+      onEachFeature: (feature, item) => {
+        if (feature.properties.popup) item.bindPopup(feature.properties.popup);
+        if (feature.properties.feature_type === 'entrega') {
+          item.bindTooltip(String(feature.properties.stop), { permanent: true,
+            direction: 'center', className: 'stop-label' });
+        }
+      }
+    }).addTo(map);
+    map.fitBounds(layer.getBounds().pad(0.12));
+    const labels = { distance: 'Distância', cost: 'Fitness',
+      vehicles: 'Veículos', status: 'Situação' };
+    document.getElementById('metrics').innerHTML = Object.entries(summary)
+      .map(([key, value]) => `<div class="metric"><span>${labels[key]}</span>` +
+        `<strong>${value}</strong></div>`).join('');
+  </script>
+</body>
+</html>

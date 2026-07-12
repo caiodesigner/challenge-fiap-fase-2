@@ -1,4 +1,4 @@
-"""Fixtures compartilhadas pelos testes de otimização."""
+"""Fixtures compartilhadas por toda a suíte de testes."""
 
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import pytest
 
 from rotas_medicas.domain import RoutingProblem, load_scenario
 
-DATA_PATH = Path(__file__).resolve().parents[2] / "data"
+DATA_PATH = Path(__file__).resolve().parents[1] / "data"
 
 
 @pytest.fixture
