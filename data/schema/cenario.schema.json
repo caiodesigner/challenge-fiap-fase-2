@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/caiodesigner/challenge-fiap-fase-2/data/schema/cenario.schema.json",
+  "title": "Cenário de distribuição de medicamentos e insumos",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "versao_schema",
+    "cenario",
+    "configuracao",
+    "deposito",
+    "veiculos",
+    "entregas"
+  ],
+  "properties": {
+    "versao_schema": { "const": "1.0" },
+    "cenario": { "$ref": "#/$defs/cenario" },
+    "configuracao": { "$ref": "#/$defs/configuracao" },
+    "deposito": { "$ref": "#/$defs/deposito" },
+    "veiculos": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/veiculo" }
+    },
+    "entregas": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/entrega" }
+    }
+  },
+  "$defs": {
+    "cenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "nome",
+        "descricao",
+        "data_planejamento",
+        "seed",
+        "viavel_esperado",
+        "motivo_inviabilidade_esperado"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "nome": { "type": "string", "minLength": 1 },
+        "descricao": { "type": "string", "minLength": 1 },
+        "data_planejamento": { "type": "string", "format": "date" },
+        "seed": { "type": "integer", "minimum": 0 },
+        "viavel_esperado": { "type": "boolean" },
+        "motivo_inviabilidade_esperado": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "configuracao": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metodo_distancia",
+        "unidade_distancia",
+        "unidade_carga",
+        "pesos_prioridade"
+      ],
+      "properties": {
+        "metodo_distancia": { "const": "haversine" },
+        "unidade_distancia": { "const": "km" },
+        "unidade_carga": { "const": "volume_logistico" },
+        "pesos_prioridade": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["critica", "alta", "normal", "baixa"],
+          "properties": {
+            "critica": { "const": 4 },
+            "alta": { "const": 3 },
+            "normal": { "const": 2 },
+            "baixa": { "const": 1 }
+          }
+        }
+      }
+    },
+    "coordenadas": {
+      "type": "object",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "deposito": {
+      "allOf": [
+        { "$ref": "#/$defs/coordenadas" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "nome", "latitude", "longitude"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "nome": { "type": "string", "minLength": 1 },
+            "latitude": true,
+            "longitude": true
+          }
+        }
+      ]
+    },
+    "veiculo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "descricao",
+        "capacidade",
+        "autonomia_km",
+        "custo_fixo",
+        "custo_por_km",
+        "disponivel"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "descricao": { "type": "string", "minLength": 1 },
+        "capacidade": { "type": "number", "exclusiveMinimum": 0 },
+        "autonomia_km": { "type": "number", "exclusiveMinimum": 0 },
+        "custo_fixo": { "type": "number", "minimum": 0 },
+        "custo_por_km": { "type": "number", "minimum": 0 },
+        "disponivel": { "type": "boolean" }
+      }
+    },
+    "entrega": {
+      "allOf": [
+        { "$ref": "#/$defs/coordenadas" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "destino",
+            "tipo_destino",
+            "latitude",
+            "longitude",
+            "demanda",
+            "prioridade",
+            "prazo_alvo_minutos",
+            "descricao_carga"
+          ],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "destino": { "type": "string", "minLength": 1 },
+            "tipo_destino": {
+              "enum": ["unidade_saude", "atendimento_domiciliar"]
+            },
+            "latitude": true,
+            "longitude": true,
+            "demanda": { "type": "number", "exclusiveMinimum": 0 },
+            "prioridade": {
+              "enum": ["critica", "alta", "normal", "baixa"]
+            },
+            "prazo_alvo_minutos": {
+              "type": ["integer", "null"],
+              "exclusiveMinimum": 0
+            },
+            "descricao_carga": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    }
+  }
+}
+

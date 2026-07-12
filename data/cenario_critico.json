@@ -1,0 +1,258 @@
+{
+  "versao_schema": "1.0",
+  "cenario": {
+    "id": "critico",
+    "nome": "Cenário crítico",
+    "descricao": "Alta demanda, entregas urgentes e frota com pouca folga.",
+    "data_planejamento": "2026-08-03",
+    "seed": 303,
+    "viavel_esperado": true,
+    "motivo_inviabilidade_esperado": null
+  },
+  "configuracao": {
+    "metodo_distancia": "haversine",
+    "unidade_distancia": "km",
+    "unidade_carga": "volume_logistico",
+    "pesos_prioridade": {
+      "critica": 4,
+      "alta": 3,
+      "normal": 2,
+      "baixa": 1
+    }
+  },
+  "deposito": {
+    "id": "DEP-001",
+    "nome": "Centro de Distribuição Hospitalar Central",
+    "latitude": -23.55052,
+    "longitude": -46.633308
+  },
+  "veiculos": [
+    {
+      "id": "VEI-001",
+      "descricao": "Veículo de distribuição 01",
+      "capacidade": 55,
+      "autonomia_km": 38,
+      "custo_fixo": 100,
+      "custo_por_km": 2.4,
+      "disponivel": true
+    },
+    {
+      "id": "VEI-002",
+      "descricao": "Veículo de distribuição 02",
+      "capacidade": 50,
+      "autonomia_km": 36,
+      "custo_fixo": 95,
+      "custo_por_km": 2.3,
+      "disponivel": true
+    },
+    {
+      "id": "VEI-003",
+      "descricao": "Veículo de distribuição 03",
+      "capacidade": 45,
+      "autonomia_km": 34,
+      "custo_fixo": 85,
+      "custo_por_km": 2.1,
+      "disponivel": true
+    }
+  ],
+  "entregas": [
+    {
+      "id": "ENT-001",
+      "destino": "Unidade de saúde fictícia 01",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.544998,
+      "longitude": -46.599465,
+      "demanda": 8,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Medicamentos de uso hospitalar"
+    },
+    {
+      "id": "ENT-002",
+      "destino": "Unidade de saúde fictícia 02",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.531523,
+      "longitude": -46.604064,
+      "demanda": 9,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Kits de curativo"
+    },
+    {
+      "id": "ENT-003",
+      "destino": "Domicílio fictício 03",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.533453,
+      "longitude": -46.627177,
+      "demanda": 7,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Soluções intravenosas"
+    },
+    {
+      "id": "ENT-004",
+      "destino": "Unidade de saúde fictícia 04",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.529509,
+      "longitude": -46.629744,
+      "demanda": 10,
+      "prioridade": "normal",
+      "prazo_alvo_minutos": 240,
+      "descricao_carga": "Materiais descartáveis"
+    },
+    {
+      "id": "ENT-005",
+      "destino": "Unidade de saúde fictícia 05",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.520594,
+      "longitude": -46.637477,
+      "demanda": 6,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Insumos de laboratório"
+    },
+    {
+      "id": "ENT-006",
+      "destino": "Domicílio fictício 06",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.536173,
+      "longitude": -46.644321,
+      "demanda": 9,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Medicamentos de uso hospitalar"
+    },
+    {
+      "id": "ENT-007",
+      "destino": "Unidade de saúde fictícia 07",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.532992,
+      "longitude": -46.654959,
+      "demanda": 8,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Kits de curativo"
+    },
+    {
+      "id": "ENT-008",
+      "destino": "Unidade de saúde fictícia 08",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.545918,
+      "longitude": -46.647599,
+      "demanda": 9,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Soluções intravenosas"
+    },
+    {
+      "id": "ENT-009",
+      "destino": "Domicílio fictício 09",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.549498,
+      "longitude": -46.656749,
+      "demanda": 7,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Materiais descartáveis"
+    },
+    {
+      "id": "ENT-010",
+      "destino": "Unidade de saúde fictícia 10",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.565869,
+      "longitude": -46.660196,
+      "demanda": 10,
+      "prioridade": "normal",
+      "prazo_alvo_minutos": 240,
+      "descricao_carga": "Insumos de laboratório"
+    },
+    {
+      "id": "ENT-011",
+      "destino": "Unidade de saúde fictícia 11",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.563459,
+      "longitude": -46.646704,
+      "demanda": 6,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Medicamentos de uso hospitalar"
+    },
+    {
+      "id": "ENT-012",
+      "destino": "Domicílio fictício 12",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.566937,
+      "longitude": -46.639265,
+      "demanda": 9,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Kits de curativo"
+    },
+    {
+      "id": "ENT-013",
+      "destino": "Unidade de saúde fictícia 13",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.56589,
+      "longitude": -46.637059,
+      "demanda": 8,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Soluções intravenosas"
+    },
+    {
+      "id": "ENT-014",
+      "destino": "Unidade de saúde fictícia 14",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.580203,
+      "longitude": -46.626977,
+      "demanda": 9,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Materiais descartáveis"
+    },
+    {
+      "id": "ENT-015",
+      "destino": "Domicílio fictício 15",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.576086,
+      "longitude": -46.615654,
+      "demanda": 7,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Insumos de laboratório"
+    },
+    {
+      "id": "ENT-016",
+      "destino": "Unidade de saúde fictícia 16",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.566209,
+      "longitude": -46.6112,
+      "demanda": 10,
+      "prioridade": "normal",
+      "prazo_alvo_minutos": 240,
+      "descricao_carga": "Medicamentos de uso hospitalar"
+    },
+    {
+      "id": "ENT-017",
+      "destino": "Unidade de saúde fictícia 17",
+      "tipo_destino": "unidade_saude",
+      "latitude": -23.565286,
+      "longitude": -46.602619,
+      "demanda": 6,
+      "prioridade": "alta",
+      "prazo_alvo_minutos": 120,
+      "descricao_carga": "Kits de curativo"
+    },
+    {
+      "id": "ENT-018",
+      "destino": "Domicílio fictício 18",
+      "tipo_destino": "atendimento_domiciliar",
+      "latitude": -23.544883,
+      "longitude": -46.604945,
+      "demanda": 9,
+      "prioridade": "critica",
+      "prazo_alvo_minutos": 60,
+      "descricao_carga": "Soluções intravenosas"
+    }
+  ]
+}

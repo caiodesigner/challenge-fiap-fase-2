@@ -63,3 +63,4 @@ tests/               # Testes automatizados
 ## Documentação
 
 - [Definição do problema e critérios](docs/definicao-do-problema.md)
+- [Dados e cenários de demonstração](data/README.md)
