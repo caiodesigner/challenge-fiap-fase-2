@@ -57,6 +57,15 @@ python -m rotas_medicas.api
 A interface estará disponível em `http://127.0.0.1:8000` e a documentação da
 API em `http://127.0.0.1:8000/docs`.
 
+## Entregáveis
+
+- [Relatório técnico consolidado](docs/relatorio-tecnico.md)
+- [Arquitetura da solução](docs/arquitetura.md)
+- [Guia da API](docs/api.md)
+- [Roteiro do vídeo de demonstração](docs/roteiro-video.md)
+- [Checklist de entrega](docs/checklist-entrega.md)
+- [Índice completo da documentação](docs/indice.md)
+
 ## Estrutura
 
 ```text
@@ -76,7 +85,7 @@ scripts/             # Comandos operacionais reproduzíveis
 tests/               # Testes automatizados
 ```
 
-## Documentação
+## Documentação por etapa
 
 - [Definição do problema e critérios](docs/definicao-do-problema.md)
 - [Dados e cenários de demonstração](data/README.md)
