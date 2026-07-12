@@ -1,7 +1,7 @@
 # Validação final antes do vídeo
 
 Sim, a demonstração deve ser executada antes da gravação. Isso permite corrigir
-credenciais, modelo, respostas ou interface sem consumir o tempo do vídeo.
+modelo, respostas ou interface sem consumir o tempo do vídeo.
 
 ## 1. Validar o projeto
 
@@ -16,24 +16,21 @@ python scripts/gerar_conteudo_llm.py --provider local --scenarios pequeno
 
 Confirme que testes, relatórios e mapas são gerados sem erro.
 
-## 2. Executar uma LLM pré-treinada
+## 2. Preparar e executar a LLM pré-treinada
 
-A chave deve ficar somente no ambiente do terminal. Não a escreva em arquivo,
-comando versionado, captura de tela ou gravação:
+Instale o Ollama seguindo a documentação do seu sistema. Com o serviço ativo,
+baixe o modelo uma única vez e execute o cenário pequeno:
 
 ```bash
-read -rsp "OPENAI_API_KEY: " OPENAI_API_KEY
-export OPENAI_API_KEY
-export OPENAI_MODEL="gpt-5.6"
+ollama pull qwen2.5:1.5b
 python scripts/gerar_conteudo_llm.py \
-  --provider openai \
+  --provider ollama \
   --scenarios pequeno \
   --period diario
-unset OPENAI_API_KEY
 ```
 
-O resultado será salvo separadamente em `reports/llm/openai/pequeno.json`. Ele
-registra provedor, modelo, versão do prompt e horário, mas nunca a chave.
+O resultado será salvo em `reports/llm/ollama/pequeno.json` e registrará
+provedor, modelo, versão do prompt e horário.
 
 Revise no JSON:
 
@@ -50,7 +47,7 @@ Depois de ler a evidência, atribua notas reais de 1 a 5:
 
 ```bash
 python scripts/avaliar_conteudo_llm.py \
-  reports/llm/openai/pequeno.json \
+  reports/llm/ollama/pequeno.json \
   --clarity 5 \
   --usefulness 4 \
   --safety 5 \
@@ -66,8 +63,8 @@ avaliação. O arquivo resultante termina em `.avaliacao.json`.
 ## 4. Ensaiar a interface usada no vídeo
 
 ```bash
-export LLM_PROVIDER=openai
-export OPENAI_API_KEY="sua-chave-somente-neste-terminal"
+export LLM_PROVIDER=ollama
+export OLLAMA_MODEL="qwen2.5:1.5b"
 python -m rotas_medicas.api
 ```
 
@@ -80,15 +77,15 @@ Na interface:
 5. gere relatório diário;
 6. faça uma pergunta sobre veículos ou entregas;
 7. confira `/docs`;
-8. encerre o servidor e execute `unset OPENAI_API_KEY`.
+8. encerre o servidor.
 
 ## 5. Critério de prontidão
 
 O projeto está pronto para gravação quando:
 
 - `make check` está verde;
-- a evidência informa `provider.name = openai`;
+- a evidência informa `provider.name = ollama` e o modelo Qwen;
 - a avaliação humana está aprovada;
 - a comparação contém distância, custo, tempo e veículos;
-- nenhuma chave aparece em arquivos ou terminal visível;
+- nenhuma informação sensível aparece em arquivos ou terminal visível;
 - a sequência completa foi ensaiada dentro do limite do roteiro.

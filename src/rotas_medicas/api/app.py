@@ -28,7 +28,7 @@ from rotas_medicas.application import (
     SolutionNotFoundError,
 )
 from rotas_medicas.genetic import GeneticConfig
-from rotas_medicas.llm import LLMProvider, OpenAIResponsesProvider, RuleBasedProvider
+from rotas_medicas.llm import LLMProvider, OllamaProvider, RuleBasedProvider
 
 
 def data_dir_from_environment() -> Path:
@@ -40,12 +40,12 @@ DEFAULT_DATA_DIR = data_dir_from_environment()
 
 
 def _provider_from_environment() -> LLMProvider:
-    provider_name = os.getenv("LLM_PROVIDER", "local").lower()
+    provider_name = os.getenv("LLM_PROVIDER", "ollama").lower()
     if provider_name == "local":
         return RuleBasedProvider()
-    if provider_name == "openai":
-        return OpenAIResponsesProvider()
-    raise ValueError("LLM_PROVIDER deve ser 'local' ou 'openai'.")
+    if provider_name == "ollama":
+        return OllamaProvider()
+    raise ValueError("LLM_PROVIDER deve ser 'local' ou 'ollama'.")
 
 
 def create_app(

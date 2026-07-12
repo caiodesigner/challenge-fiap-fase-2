@@ -16,7 +16,7 @@ A solução combina:
 - mapas, indicadores, GeoJSON e convergência;
 - integração segura com LLM para instruções, relatórios e perguntas;
 - API FastAPI e interface web;
-- 110 testes automatizados e 94,22% de cobertura.
+- 112 testes automatizados e 94,32% de cobertura.
 
 Nos experimentos iniciais, a melhor configuração genética média reduziu o custo
 composto em 25,85% no cenário pequeno e 27,75% no médio em relação ao melhor
@@ -230,8 +230,10 @@ Consulte [Visualizações](visualizacoes.md).
 
 `RouteLanguageService` monta um contexto JSON com fatos calculados e solicita
 Structured Outputs validados por Pydantic. `LLMProvider` desacopla a aplicação do
-fornecedor. Existe um adaptador para OpenAI Responses API, um provedor de fila
-para testes e um fallback local explicitamente identificado como não LLM.
+fornecedor. Existe um adaptador para a API local do Ollama, um provedor de fila
+para testes e um fallback determinístico explicitamente identificado como não
+LLM. O modelo escolhido é `qwen2.5:1.5b`, pré-treinado, multilíngue e executado
+sem cobrança por chamada.
 
 A LLM não calcula rotas. Instruções que trocam sequência ou veículos são
 rejeitadas. Respostas com IDs inexistentes também falham. O prompt proíbe dados
@@ -256,9 +258,9 @@ inclui economia de distância, custo e tempo estimado calculada pelo sistema, se
 delegar aritmética à LLM. A avaliação humana possui script próprio com notas de
 clareza, utilidade, segurança e fundamentação.
 
-Os artefatos em `reports/llm` foram gerados pelo modo local, não pela OpenAI. Uma
-chamada real exige `OPENAI_API_KEY` e deve ser executada pelo grupo antes da
-gravação do vídeo caso a demonstração externa seja desejada. Consulte
+Os artefatos em `reports/llm` foram gerados pelo fallback determinístico. Uma
+execução real do Qwen pelo Ollama deve ser realizada e revisada pelo grupo antes
+da gravação. Consulte
 [Integração com LLM](integracao-llm.md) e
 [Validação final antes do vídeo](demonstracao-final.md).
 
@@ -285,7 +287,7 @@ O pipeline local e o GitHub Actions executam:
 - cobertura mínima de 90%;
 - `pip check`.
 
-Estado documentado desta entrega: 110 testes aprovados e 94,22% de cobertura. Os
+Estado documentado desta entrega: 112 testes aprovados e 94,32% de cobertura. Os
 testes da API usam transporte ASGI; testes de LLM não acessam rede. Consulte
 [Testes e qualidade](testes-e-qualidade.md).
 
@@ -327,7 +329,7 @@ Nenhum teste depende de API externa ou segredo.
 - configuração de nuvem validada localmente, mas ainda sem provisionamento em
   projeto externo;
 - sem avaliação humana registrada da LLM;
-- sem execução real da OpenAI versionada;
+- sem execução real do Ollama versionada;
 - cenário crítico ainda não incluído na matriz experimental completa.
 
 ## 14. Próximos passos

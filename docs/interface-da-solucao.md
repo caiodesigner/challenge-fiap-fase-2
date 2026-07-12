@@ -30,12 +30,12 @@ Abrir no navegador:
 - OpenAPI JSON: `http://127.0.0.1:8000/openapi.json`;
 - verificação de saúde: `http://127.0.0.1:8000/health`.
 
-O provedor de linguagem padrão é local e não usa rede. Para utilizar a OpenAI:
+O provedor padrão é o Ollama local. Baixe o modelo antes de iniciar a API:
 
 ```bash
-export LLM_PROVIDER=openai
-export OPENAI_API_KEY="sua-chave"
-export OPENAI_MODEL="gpt-5.6"
+ollama pull qwen2.5:1.5b
+export LLM_PROVIDER=ollama
+export OLLAMA_MODEL="qwen2.5:1.5b"
 python -m rotas_medicas.api
 ```
 
@@ -90,7 +90,7 @@ implantação com múltiplos usuários.
 - população e gerações possuem limites máximos;
 - cenários inviáveis retornam HTTP 422 com diagnóstico;
 - IDs de solução inexistentes retornam HTTP 404;
-- a chave da OpenAI não é exposta ao navegador;
+- nenhuma chave ou credencial é necessária para o Ollama local;
 - o modo local é usado por padrão.
 
 Esta versão não possui autenticação, autorização, limitação de requisições ou

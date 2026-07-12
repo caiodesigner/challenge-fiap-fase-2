@@ -1,0 +1,21 @@
+{
+  "evidence_file": "reports/llm/ollama/pequeno.json",
+  "scenario_id": "pequeno",
+  "provider": {
+    "name": "ollama",
+    "model": "qwen2.5:1.5b",
+    "prompt_version": "1.1",
+    "generated_at_utc": "2026-07-12T22:05:22.811634+00:00"
+  },
+  "evaluated_at_utc": "2026-07-12T22:15:34.600958+00:00",
+  "reviewer": "Caio",
+  "scores_1_to_5": {
+    "clareza": 5,
+    "utilidade": 5,
+    "seguranca": 5,
+    "fundamentacao": 5
+  },
+  "average_score": 5.0,
+  "decision": "aprovado",
+  "notes": "Rotas, sequências, prioridades, métricas e IDs de evidência conferidos. O conteúdo está claro, seguro e fundamentado. Os dados são sintéticos e o tempo não considera trânsito em tempo real."
+}

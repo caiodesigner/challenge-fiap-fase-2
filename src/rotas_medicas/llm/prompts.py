@@ -102,11 +102,12 @@ def _with_context(task: str, context: dict[str, Any]) -> str:
 
 
 def instructions_prompt(context: dict[str, Any]) -> str:
-    """Solicita instruções sem permitir mudanças na sequência calculada."""
+    """Solicita escolhas dentro de orientações operacionais fundamentadas."""
     return _with_context(
-        "Gere instruções para motoristas. Preserve exatamente veículos, paradas "
-        "e ordem. Destaque entregas críticas e alertas operacionais sem criar "
-        "informações ausentes.",
+        "Selecione os focos mais adequados entre as opções permitidas pelo contrato. "
+        "Não produza texto livre e não liste, copie ou reorganize IDs, veículos e "
+        "paradas. O sistema transformará as escolhas em orientações fundamentadas e "
+        "anexará a estrutura e a sequência calculadas.",
         context,
     )
 

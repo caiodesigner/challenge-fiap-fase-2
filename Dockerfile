@@ -15,6 +15,7 @@ ENV HOST=0.0.0.0 \
     PORT=8080 \
     DATA_DIR=/app/data \
     LLM_PROVIDER=local \
+    OLLAMA_MODEL=qwen2.5:1.5b \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 

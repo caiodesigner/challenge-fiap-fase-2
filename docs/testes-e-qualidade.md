@@ -15,7 +15,7 @@ inviabilidades e respostas externas inconsistentes.
 | Otimização | distância, fitness, penalidades e baselines |
 | Experimentos | matriz de configurações, seeds e relatórios |
 | Visualização | GeoJSON, HTML e SVG |
-| LLM | contratos, fundamentação, sequência e provedor OpenAI simulado |
+| LLM | contratos, fundamentação, sequência e API Ollama simulada |
 | Aplicação | catálogo, armazenamento e orquestração |
 | API | interface, OpenAPI, otimização, LLM e erros HTTP |
 
@@ -77,7 +77,7 @@ nova é enviada.
 
 ## Limitações
 
-- A API real da OpenAI não é chamada pelo CI.
+- O serviço real do Ollama não é chamado pelo CI.
 - Tiles do OpenStreetMap não são carregados nos testes.
 - Tempos de execução não são usados como asserção por variarem entre máquinas.
 - Testes de carga, segurança dinâmica e navegador real ficam para uma evolução.

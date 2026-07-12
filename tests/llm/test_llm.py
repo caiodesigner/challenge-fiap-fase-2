@@ -2,17 +2,19 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
 
+import httpx
 import pytest
 
 from rotas_medicas.domain import RoutingProblem
 from rotas_medicas.genetic import RouteChromosome
 from rotas_medicas.llm import (
+    DriverGuidance,
     DriverInstructions,
     EfficiencyNarrative,
     LLMValidationError,
-    OpenAIResponsesProvider,
+    OllamaProvider,
     QueueProvider,
     RouteAnswer,
     RouteLanguageService,
@@ -60,6 +62,15 @@ def valid_instructions(
     )
 
 
+def valid_guidance() -> DriverGuidance:
+    return DriverGuidance(
+        operational_focus="conferencia_carga",
+        critical_focus="confirmacao_recebimento",
+        standard_focus="registro_entrega",
+        alert_focus="comunicar_impedimento",
+    )
+
+
 def test_context_contains_only_calculated_route_facts(
     small_problem: RoutingProblem,
 ) -> None:
@@ -82,7 +93,7 @@ def test_service_generates_and_validates_all_use_cases(
 ) -> None:
     """Instruções, relatório e resposta devem cumprir seus contratos."""
     chromosome, fitness = plan(small_problem)
-    instructions = valid_instructions(small_problem, chromosome)
+    guidance = valid_guidance()
     report = EfficiencyNarrative(
         period="diario",
         title="Relatório",
@@ -96,7 +107,7 @@ def test_service_generates_and_validates_all_use_cases(
         answer="O veículo VEI-001 participa.",
         evidence_vehicle_ids=("VEI-001",),
     )
-    provider = QueueProvider([instructions, report, answer])
+    provider = QueueProvider([guidance, report, answer])
     service = RouteLanguageService(
         small_problem,
         chromosome,
@@ -108,7 +119,8 @@ def test_service_generates_and_validates_all_use_cases(
     generated_report = service.generate_efficiency_report()
     generated_answer, answer_quality = service.answer_question("Qual veículo?")
 
-    assert generated_instructions == instructions
+    assert generated_instructions.routes
+    assert generated_instructions.title == "Instruções operacionais do plano otimizado"
     assert instruction_quality.score == 1
     assert generated_report.period == report.period
     assert generated_report.title == report.title
@@ -120,28 +132,25 @@ def test_service_generates_and_validates_all_use_cases(
     assert all("<dados_json>" in request[1] for request in provider.requests)
 
 
-def test_rejects_instructions_that_change_route(
+def test_llm_guidance_cannot_change_route(
     small_problem: RoutingProblem,
 ) -> None:
-    """A LLM não pode trocar a sequência calculada pelo otimizador."""
+    """IDs e sequência devem vir do cromossomo, não da resposta da LLM."""
     chromosome, fitness = plan(small_problem)
-    instructions = valid_instructions(small_problem, chromosome)
-    first_route = instructions.routes[0]
-    invalid_route = first_route.model_copy(
-        update={"steps": tuple(reversed(first_route.steps))}
-    )
-    invalid = instructions.model_copy(
-        update={"routes": (invalid_route, *instructions.routes[1:])}
-    )
     service = RouteLanguageService(
         small_problem,
         chromosome,
         fitness.evaluate(chromosome),
-        QueueProvider([invalid]),
+        QueueProvider([valid_guidance()]),
     )
 
-    with pytest.raises(LLMValidationError, match="Sequência divergente"):
-        service.generate_driver_instructions()
+    instructions, quality = service.generate_driver_instructions()
+
+    assert quality.valid
+    assert (
+        tuple(step.delivery_id for route in instructions.routes for step in route.steps)
+        == chromosome.delivery_ids
+    )
 
 
 def test_rejects_unknown_answer_evidence(small_problem: RoutingProblem) -> None:
@@ -186,43 +195,28 @@ def test_rule_based_provider_supports_offline_demonstration(
     assert instructions.routes
 
 
-@dataclass
-class FakeResponse:
-    """Resposta mínima compatível com o adaptador OpenAI."""
-
-    output_parsed: DriverInstructions | None
-
-
-class FakeResponses:
-    """Captura a chamada feita ao endpoint Responses."""
-
-    def __init__(self, parsed: DriverInstructions | None) -> None:
-        self.parsed = parsed
-        self.kwargs: dict[str, object] = {}
-
-    def parse(self, **kwargs: object) -> FakeResponse:
-        """Registra os argumentos e devolve o objeto tipado."""
-        self.kwargs = kwargs
-        return FakeResponse(self.parsed)
-
-
-class FakeOpenAI:
-    """Cliente mínimo para não acessar a rede durante os testes."""
-
-    def __init__(self, parsed: DriverInstructions | None) -> None:
-        self.responses = FakeResponses(parsed)
-
-
-def test_openai_provider_uses_responses_parse(
+def test_ollama_provider_uses_chat_with_json_schema(
     small_problem: RoutingProblem,
 ) -> None:
-    """O adaptador deve usar Structured Outputs com o modelo configurado."""
+    """O adaptador deve enviar o contrato Pydantic à API local de chat."""
     chromosome, _ = plan(small_problem)
     expected = valid_instructions(small_problem, chromosome)
-    client = FakeOpenAI(expected)
-    provider = OpenAIResponsesProvider(
+    captured: dict[str, object] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        captured.update(json.loads(request.content))
+        return httpx.Response(
+            200,
+            json={"message": {"content": expected.model_dump_json()}},
+        )
+
+    client = httpx.Client(
+        base_url="http://ollama.test",
+        transport=httpx.MockTransport(handler),
+    )
+    provider = OllamaProvider(
         model="modelo-teste",
-        client=client,  # type: ignore[arg-type]
+        client=client,
     )
 
     response = provider.generate(
@@ -233,17 +227,57 @@ def test_openai_provider_uses_responses_parse(
 
     assert response == expected
     assert provider.model == "modelo-teste"
-    assert client.responses.kwargs["text_format"] is DriverInstructions
-    assert client.responses.kwargs["model"] == "modelo-teste"
+    assert captured["model"] == "modelo-teste"
+    assert captured["format"] == DriverInstructions.model_json_schema()
+    assert captured["stream"] is False
 
 
-def test_openai_provider_rejects_empty_structured_response() -> None:
-    """Recusa ou ausência de conteúdo não pode parecer sucesso."""
-    provider = OpenAIResponsesProvider(
-        client=FakeOpenAI(None),  # type: ignore[arg-type]
+def test_ollama_provider_rejects_empty_structured_response() -> None:
+    """Ausência de conteúdo não pode parecer sucesso."""
+    client = httpx.Client(
+        base_url="http://ollama.test",
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(200, json={"message": {"content": ""}})
+        ),
     )
+    provider = OllamaProvider(client=client)
 
-    with pytest.raises(RuntimeError, match="não retornou"):
+    with pytest.raises(RuntimeError, match="conteúdo vazio"):
+        provider.generate(
+            system_prompt="sistema",
+            user_prompt="usuário",
+            response_model=DriverInstructions,
+        )
+
+
+def test_ollama_provider_explains_connection_failure() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise httpx.ConnectError("offline", request=request)
+
+    client = httpx.Client(
+        base_url="http://ollama.test",
+        transport=httpx.MockTransport(handler),
+    )
+    provider = OllamaProvider(client=client)
+
+    with pytest.raises(RuntimeError, match="não está acessível"):
+        provider.generate(
+            system_prompt="sistema",
+            user_prompt="usuário",
+            response_model=DriverInstructions,
+        )
+
+
+def test_ollama_provider_explains_missing_model() -> None:
+    client = httpx.Client(
+        base_url="http://ollama.test",
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(404, json={"error": "model not found"})
+        ),
+    )
+    provider = OllamaProvider(model="modelo-ausente", client=client)
+
+    with pytest.raises(RuntimeError, match="ollama pull modelo-ausente"):
         provider.generate(
             system_prompt="sistema",
             user_prompt="usuário",

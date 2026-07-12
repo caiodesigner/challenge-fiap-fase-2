@@ -11,7 +11,7 @@ from typing import Any, cast
 from rotas_medicas.domain import load_scenario
 from rotas_medicas.genetic import RouteChromosome
 from rotas_medicas.llm import (
-    OpenAIResponsesProvider,
+    OllamaProvider,
     RouteLanguageService,
     RuleBasedProvider,
 )
@@ -26,7 +26,7 @@ OUTPUT_DIR = ROOT / "reports" / "llm"
 def parse_args() -> argparse.Namespace:
     """Lê provedor, cenários e pasta de saída."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--provider", choices=["local", "openai"], default="local")
+    parser.add_argument("--provider", choices=["local", "ollama"], default="ollama")
     parser.add_argument(
         "--scenarios",
         nargs="+",
@@ -54,11 +54,9 @@ def main() -> None:
     """Seleciona a melhor rota e executa os três casos de uso de linguagem."""
     args = parse_args()
     results = load_results()
-    provider = (
-        OpenAIResponsesProvider() if args.provider == "openai" else RuleBasedProvider()
-    )
+    provider = OllamaProvider() if args.provider == "ollama" else RuleBasedProvider()
     output_dir = args.output_dir or (
-        OUTPUT_DIR / "openai" if args.provider == "openai" else OUTPUT_DIR
+        OUTPUT_DIR / "ollama" if args.provider == "ollama" else OUTPUT_DIR
     )
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -86,7 +84,7 @@ def main() -> None:
                 "name": args.provider,
                 "model": (
                     provider.model
-                    if isinstance(provider, OpenAIResponsesProvider)
+                    if isinstance(provider, OllamaProvider)
                     else "rule-based-1.0"
                 ),
                 "prompt_version": PROMPT_VERSION,

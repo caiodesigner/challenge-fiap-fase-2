@@ -1,4 +1,4 @@
-"""Abstrações de provedor e integração com a Responses API da OpenAI."""
+"""Abstrações de provedor e integração local com o Ollama."""
 
 from __future__ import annotations
 
@@ -8,15 +8,13 @@ from collections import deque
 from collections.abc import Iterable
 from typing import Protocol, TypeVar, cast
 
-from openai import OpenAI
+import httpx
 from pydantic import BaseModel
 
 from rotas_medicas.llm.schemas import (
-    DeliveryStep,
-    DriverInstructions,
+    DriverGuidance,
     EfficiencyNarrative,
     RouteAnswer,
-    VehicleInstructions,
 )
 
 ResponseT = TypeVar("ResponseT", bound=BaseModel)
@@ -36,18 +34,26 @@ class LLMProvider(Protocol):
         ...
 
 
-class OpenAIResponsesProvider:
-    """Provedor oficial baseado na Responses API e Structured Outputs."""
+class OllamaProvider:
+    """Provedor local baseado na API de chat e JSON Schema do Ollama."""
 
     def __init__(
         self,
         model: str | None = None,
-        client: OpenAI | None = None,
+        host: str | None = None,
+        client: httpx.Client | None = None,
     ) -> None:
         self._model: str = (
-            model if model is not None else os.environ.get("OPENAI_MODEL", "gpt-5.6")
+            model
+            if model is not None
+            else os.environ.get("OLLAMA_MODEL", "qwen2.5:1.5b")
         )
-        self._client = client or OpenAI()
+        self._host = (
+            host
+            if host is not None
+            else os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
+        )
+        self._client = client or httpx.Client(base_url=self._host, timeout=180.0)
 
     @property
     def model(self) -> str:
@@ -61,18 +67,39 @@ class OpenAIResponsesProvider:
         user_prompt: str,
         response_model: type[ResponseT],
     ) -> ResponseT:
-        """Solicita saída tipada e rejeita resposta vazia ou recusada."""
-        response = self._client.responses.parse(
-            model=self._model,
-            input=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            text_format=response_model,
-        )
-        if response.output_parsed is None:
-            raise RuntimeError("A OpenAI não retornou uma resposta estruturada.")
-        return response.output_parsed
+        """Solicita saída tipada e valida o JSON devolvido pelo modelo local."""
+        try:
+            response = self._client.post(
+                "/api/chat",
+                json={
+                    "model": self._model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    "stream": False,
+                    "format": response_model.model_json_schema(),
+                    "options": {"temperature": 0},
+                },
+            )
+            response.raise_for_status()
+            payload = response.json()
+            content = payload["message"]["content"]
+            if not isinstance(content, str) or not content.strip():
+                raise RuntimeError("O Ollama retornou conteúdo vazio.")
+            return response_model.model_validate_json(content)
+        except httpx.ConnectError as error:
+            raise RuntimeError(
+                "O Ollama não está acessível. Inicie o serviço e baixe o modelo."
+            ) from error
+        except httpx.HTTPStatusError as error:
+            detail = error.response.text
+            raise RuntimeError(
+                f"O Ollama recusou a geração ({error.response.status_code}): "
+                f"{detail}. Confirme o modelo com `ollama pull {self._model}`."
+            ) from error
+        except (KeyError, TypeError, ValueError) as error:
+            raise RuntimeError("Resposta inválida recebida do Ollama.") from error
 
 
 class QueueProvider:
@@ -112,7 +139,7 @@ class RuleBasedProvider:
         """Monta conteúdo previsível a partir do contexto JSON do prompt."""
         del system_prompt
         context = _extract_context(user_prompt)
-        if response_model is DriverInstructions:
+        if response_model is DriverGuidance:
             response: BaseModel = _rule_based_instructions(context)
         elif response_model is EfficiencyNarrative:
             response = _rule_based_report(context)
@@ -133,41 +160,13 @@ def _extract_context(prompt: str) -> dict[str, object]:
     return cast(dict[str, object], json.loads(content))
 
 
-def _rule_based_instructions(context: dict[str, object]) -> DriverInstructions:
-    routes = cast(list[dict[str, object]], context["rotas"])
-    vehicle_routes = []
-    for route in routes:
-        steps_data = cast(list[dict[str, object]], route["paradas"])
-        steps = tuple(
-            DeliveryStep.model_validate(
-                {
-                    "stop": item["ordem"],
-                    "delivery_id": item["entrega_id"],
-                    "destination": item["destino"],
-                    "priority": item["prioridade"],
-                    "instruction": (
-                        "Confirme o identificador da entrega e registre a conclusão "
-                        "antes de seguir para a próxima parada."
-                    ),
-                }
-            )
-            for item in steps_data
-        )
-        vehicle_routes.append(
-            VehicleInstructions(
-                vehicle_id=str(route["veiculo_id"]),
-                summary=f"Realizar {len(steps)} entregas na ordem planejada.",
-                steps=steps,
-                alerts=("Não alterar a sequência sem autorização da operação.",),
-            )
-        )
-    return DriverInstructions(
-        title="Instruções operacionais de entrega",
-        general_guidance=(
-            "Confira carga e documentação antes da saída.",
-            "Comunique imediatamente qualquer impedimento à central.",
-        ),
-        routes=tuple(vehicle_routes),
+def _rule_based_instructions(context: dict[str, object]) -> DriverGuidance:
+    del context
+    return DriverGuidance(
+        operational_focus="conferencia_carga",
+        critical_focus="integridade_carga",
+        standard_focus="registro_entrega",
+        alert_focus="nao_alterar_sequencia",
     )
 
 

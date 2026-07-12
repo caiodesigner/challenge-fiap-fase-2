@@ -8,7 +8,7 @@ infraestrutura é declarada em Terraform e cobre:
 - Artifact Registry para imagens privadas;
 - Cloud Run com escala de zero a duas instâncias por padrão;
 - conta de serviço exclusiva para o runtime;
-- Secret Manager opcional para `OPENAI_API_KEY`;
+- provedor de linguagem configurável por variáveis de ambiente;
 - probes de inicialização e atividade em `/health`;
 - logs de requisição, aplicação e plataforma no Cloud Logging;
 - acesso público configurável por IAM.
@@ -25,15 +25,15 @@ flowchart LR
     R --> A[FastAPI + algoritmo genético]
     R -->|imagem| AR[Artifact Registry]
     R -->|identidade| SA[Service Account]
-    R -.->|segredo opcional| SM[Secret Manager]
     R --> CL[Cloud Logging]
-    A -.->|somente se habilitado| O[OpenAI Responses API]
+    A -.->|host configurável| O[Serviço Ollama]
 ```
 
 O Cloud Run termina TLS e injeta a porta de execução. O processo Python respeita
 `HOST` e `PORT`; no contêiner, os padrões são `0.0.0.0:8080`. Os cenários são
-lidos de `DATA_DIR=/app/data`. O modo `LLM_PROVIDER=local` não depende de rede
-ou segredo externo.
+lidos de `DATA_DIR=/app/data`. O modo `LLM_PROVIDER=local` não depende de outro
+serviço. Para usar Ollama na nuvem, `OLLAMA_HOST` deve apontar para uma instância
+separada e acessível pelo Cloud Run; o modelo não está embutido na imagem web.
 
 ## Pré-requisitos
 
@@ -63,11 +63,15 @@ docker run --rm -p 8080:8080 rotas-medicas:local
 curl --fail http://127.0.0.1:8080/health
 ```
 
-Acesse `http://127.0.0.1:8080`. Para uma demonstração local com OpenAI, passe
-o segredo apenas em tempo de execução, preferencialmente por arquivo ignorado:
+Acesse `http://127.0.0.1:8080`. Para conectar o contêiner a um Ollama acessível,
+passe as configurações em tempo de execução:
 
 ```bash
-docker run --rm -p 8080:8080 --env-file .env rotas-medicas:local
+docker run --rm -p 8080:8080 \
+  -e LLM_PROVIDER=ollama \
+  -e OLLAMA_HOST=http://host.docker.internal:11434 \
+  -e OLLAMA_MODEL=qwen2.5:1.5b \
+  rotas-medicas:local
 ```
 
 ## Provisionamento
@@ -99,27 +103,20 @@ O state local é ignorado pelo Git e contém metadados da infraestrutura. Para
 trabalho em equipe ou ambiente duradouro, configure um backend GCS com
 versionamento e acesso restrito antes do primeiro `terraform apply`.
 
-### Habilitar a OpenAI
+### Habilitar o Ollama
 
-O Terraform cria o contêiner do segredo, mas deliberadamente não recebe o valor
-da chave: valores fornecidos como variável seriam preservados no state. Para a
-primeira ativação:
+O padrão do Cloud Run é `llm_provider = "local"`, pois o contêiner da aplicação
+não executa o servidor de modelos. Para usar uma instância Ollama já implantada,
+configure:
 
-1. defina `enable_openai = true` em `terraform.tfvars`;
-2. crie somente o segredo;
-3. adicione uma versão pela entrada padrão;
-4. aplique o restante da infraestrutura.
-
-```bash
-terraform apply -target=google_secret_manager_secret.openai_api_key
-printf '%s' "$OPENAI_API_KEY" | gcloud secrets versions add \
-  "${SERVICE_NAME}-openai-api-key" --data-file=-
-terraform apply
+```hcl
+llm_provider = "ollama"
+ollama_host  = "https://ollama.exemplo.interno"
+ollama_model = "qwen2.5:1.5b"
 ```
 
-Nunca escreva a chave em `terraform.tfvars`, comandos versionados ou outputs. A
-conta do Cloud Run recebe apenas `roles/secretmanager.secretAccessor` no segredo
-da aplicação.
+Essa implantação separada é opcional; a demonstração acadêmica da LLM pode ser
+feita integralmente na máquina local, sem custos de API ou de GPU em nuvem.
 
 ## Operação e observabilidade
 
@@ -165,5 +162,5 @@ terraform destroy
 ```
 
 Cloud Run em escala zero reduz consumo ocioso, mas Artifact Registry, logs,
-tráfego, Secret Manager e chamadas OpenAI podem gerar cobrança. Consulte a
+tráfego e um eventual serviço Ollama em nuvem podem gerar cobrança. Consulte a
 calculadora do provedor antes da implantação.

@@ -155,19 +155,18 @@ são rejeitadas.
 
 ## Configuração da LLM
 
-Modo local padrão:
+Fallback determinístico:
 
 ```bash
 export LLM_PROVIDER=local
 ```
 
-OpenAI:
+Ollama com LLM pré-treinada:
 
 ```bash
-export LLM_PROVIDER=openai
-export OPENAI_API_KEY="sua-chave"
-export OPENAI_MODEL="gpt-5.6"
+ollama pull qwen2.5:1.5b
+export LLM_PROVIDER=ollama
+export OLLAMA_MODEL="qwen2.5:1.5b"
 ```
 
-A chave permanece no backend e nunca é devolvida pela API ou enviada ao
-navegador.
+O Ollama executa localmente e não exige chave de API.

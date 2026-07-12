@@ -30,19 +30,20 @@
 ## Demonstração da LLM
 
 - [x] Modo local determinístico disponível.
-- [x] Adaptador real OpenAI implementado.
-- [x] Structured Outputs e validação semântica.
+- [x] Adaptador real Ollama implementado.
+- [x] Qwen 2.5 pré-treinado selecionado.
+- [x] JSON Schema e validação semântica.
 - [x] Testes sem rede.
 - [x] Comparação determinística com baseline no relatório.
 - [x] Economia de distância, custo, tempo e veículos.
 - [x] Script para registrar avaliação humana.
-- [ ] Configurar `OPENAI_API_KEY` fora do repositório.
-- [ ] Executar e revisar uma amostra real da OpenAI.
+- [ ] Baixar `qwen2.5:1.5b` no Ollama.
+- [ ] Executar e revisar uma amostra real do Ollama.
 - [ ] Registrar avaliação humana de clareza, utilidade e segurança.
 
-Os três itens pendentes dependem da chave e da revisão do grupo. Os JSONs atuais
-em `reports/llm` identificam corretamente o provedor local; uma execução OpenAI
-será gravada separadamente em `reports/llm/openai`.
+Os itens pendentes dependem da execução e revisão do grupo. Os JSONs atuais em
+`reports/llm` identificam o fallback determinístico; uma execução da LLM será
+gravada separadamente em `reports/llm/ollama`.
 
 ## Vídeo
 

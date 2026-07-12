@@ -26,16 +26,27 @@ variable "allow_unauthenticated" {
   default     = true
 }
 
-variable "enable_openai" {
-  description = "Injeta o segredo OPENAI_API_KEY e ativa o provedor OpenAI."
-  type        = bool
-  default     = false
+variable "llm_provider" {
+  description = "Provedor de linguagem no Cloud Run: local ou ollama."
+  type        = string
+  default     = "local"
+
+  validation {
+    condition     = contains(["local", "ollama"], var.llm_provider)
+    error_message = "llm_provider deve ser local ou ollama."
+  }
 }
 
-variable "openai_model" {
-  description = "Modelo usado quando a integração OpenAI estiver ativa."
+variable "ollama_host" {
+  description = "URL de um Ollama acessível pelo Cloud Run quando habilitado."
   type        = string
-  default     = "gpt-5.6"
+  default     = "http://127.0.0.1:11434"
+}
+
+variable "ollama_model" {
+  description = "Modelo pré-treinado disponível no serviço Ollama."
+  type        = string
+  default     = "qwen2.5:1.5b"
 }
 
 variable "max_instances" {

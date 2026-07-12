@@ -10,8 +10,7 @@ preservando margem para transições.
 - Confirmar `http://127.0.0.1:8000/health`.
 - Abrir a interface e `/docs` em abas separadas.
 - Usar o cenário pequeno primeiro e o médio para resultados.
-- Decidir entre provedor LLM local ou OpenAI.
-- Se usar OpenAI, testar a chave antes e não exibir terminal com segredo.
+- Iniciar o Ollama e confirmar que `qwen2.5:1.5b` está disponível.
 - Fechar notificações e aumentar zoom do navegador.
 - Ter o relatório e as visualizações previamente abertos.
 
@@ -131,7 +130,7 @@ Na interface, usar a solução já calculada:
 Falar explicitamente qual provedor está ativo:
 
 - local: demonstração determinística sem LLM externa;
-- OpenAI: Responses API com Structured Outputs.
+- Ollama: Qwen 2.5 local com saída estruturada por JSON Schema.
 
 Explicar as proteções:
 
@@ -140,8 +139,8 @@ Explicar as proteções:
 - sem diagnóstico ou prescrição;
 - apenas dados estruturados do plano.
 
-Para atender plenamente à demonstração de LLM do enunciado, prefira gravar esta
-parte com `LLM_PROVIDER=openai`, após validação institucional da chave e custos.
+Para demonstrar a LLM pré-treinada exigida, grave esta parte com
+`LLM_PROVIDER=ollama`; o modo `local` é apenas um fallback determinístico.
 
 ## 11:45–12:45 — API e testes
 
@@ -149,8 +148,8 @@ Abrir `/docs` e mostrar os endpoints sem executar todos.
 
 Mostrar terminal com resultado de `make check`:
 
-- 110 testes;
-- 94,22% de cobertura;
+- 112 testes;
+- 94,32% de cobertura;
 - Ruff;
 - mypy estrito;
 - pipeline GitHub Actions.

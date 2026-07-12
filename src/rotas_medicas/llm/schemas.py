@@ -40,6 +40,23 @@ class DriverInstructions(StrictModel):
     routes: tuple[VehicleInstructions, ...]
 
 
+class DriverGuidance(StrictModel):
+    """Seleções da LLM dentro de orientações previamente fundamentadas."""
+
+    operational_focus: Literal[
+        "conferencia_carga", "comunicacao_central", "registro_entrega"
+    ]
+    critical_focus: Literal[
+        "integridade_carga", "confirmacao_recebimento", "prioridade_operacional"
+    ]
+    standard_focus: Literal[
+        "confirmacao_destino", "registro_entrega", "integridade_carga"
+    ]
+    alert_focus: Literal[
+        "nao_alterar_sequencia", "comunicar_impedimento", "conferir_capacidade"
+    ]
+
+
 class EfficiencyNarrative(StrictModel):
     """Interpretação gerencial produzida pelo provedor de linguagem."""
 

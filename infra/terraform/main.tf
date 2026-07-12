@@ -8,7 +8,6 @@ locals {
     "artifactregistry.googleapis.com",
     "iam.googleapis.com",
     "run.googleapis.com",
-    "secretmanager.googleapis.com",
   ])
 }
 
@@ -34,25 +33,6 @@ resource "google_service_account" "app" {
   display_name = "Cloud Run - Otimização de Rotas Médicas"
 
   depends_on = [google_project_service.required]
-}
-
-resource "google_secret_manager_secret" "openai_api_key" {
-  count = var.enable_openai ? 1 : 0
-
-  secret_id = "${var.service_name}-openai-api-key"
-  replication {
-    auto {}
-  }
-
-  depends_on = [google_project_service.required]
-}
-
-resource "google_secret_manager_secret_iam_member" "openai_accessor" {
-  count = var.enable_openai ? 1 : 0
-
-  secret_id = google_secret_manager_secret.openai_api_key[0].id
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.app.email}"
 }
 
 resource "google_cloud_run_v2_service" "app" {
@@ -87,25 +67,17 @@ resource "google_cloud_run_v2_service" "app" {
 
       env {
         name  = "LLM_PROVIDER"
-        value = var.enable_openai ? "openai" : "local"
+        value = var.llm_provider
       }
 
       env {
-        name  = "OPENAI_MODEL"
-        value = var.openai_model
+        name  = "OLLAMA_MODEL"
+        value = var.ollama_model
       }
 
-      dynamic "env" {
-        for_each = var.enable_openai ? [1] : []
-        content {
-          name = "OPENAI_API_KEY"
-          value_source {
-            secret_key_ref {
-              secret  = google_secret_manager_secret.openai_api_key[0].secret_id
-              version = "latest"
-            }
-          }
-        }
+      env {
+        name  = "OLLAMA_HOST"
+        value = var.ollama_host
       }
 
       startup_probe {
@@ -136,7 +108,6 @@ resource "google_cloud_run_v2_service" "app" {
 
   depends_on = [
     google_artifact_registry_repository.app,
-    google_secret_manager_secret_iam_member.openai_accessor,
   ]
 }
 

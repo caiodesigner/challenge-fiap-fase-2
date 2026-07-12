@@ -38,8 +38,8 @@ def main() -> None:
         json.loads(args.input.read_text(encoding="utf-8")),
     )
     provider = cast(dict[str, Any], evidence.get("provider", {}))
-    if provider.get("name") != "openai":
-        raise ValueError("A avaliação final exige uma evidência do provedor OpenAI.")
+    if provider.get("name") != "ollama":
+        raise ValueError("A avaliação final exige uma evidência do provedor Ollama.")
 
     scores = {
         "clareza": args.clarity,

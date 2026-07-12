@@ -15,7 +15,7 @@ flowchart LR
     A --> V[Visualização]
     A --> L[Assistente de linguagem]
     G --> D[(Cenários JSON)]
-    L -->|opcional| X[OpenAI Responses API]
+    L -->|HTTP local| X[Ollama + Qwen 2.5]
     A --> M[(Soluções em memória)]
 ```
 
@@ -146,7 +146,7 @@ api -> application -> domain
                   -> visualization -> domain + optimization
 ```
 
-O domínio não importa FastAPI, OpenAI ou bibliotecas de visualização. O motor
+O domínio não importa FastAPI, Ollama ou bibliotecas de visualização. O motor
 genético também não conhece o contexto hospitalar: ele recebe uma função de
 custo injetável.
 
@@ -205,19 +205,19 @@ Para produção, a arquitetura pode evoluir sem alterar o domínio:
 
 ## Implantação em nuvem
 
-A entrega opcional utiliza uma imagem Docker no Google Cloud Run, Artifact
-Registry e Secret Manager, provisionados por Terraform. A conta de serviço do
-runtime tem acesso somente ao segredo da aplicação. Probes consultam `/health`,
-e logs e métricas de plataforma são capturados pelo Google Cloud.
+A entrega opcional utiliza uma imagem Docker no Google Cloud Run e Artifact
+Registry, provisionados por Terraform. Uma conta de serviço exclusiva executa o
+runtime. Probes consultam `/health`, e logs e métricas de plataforma são
+capturados pelo Google Cloud. O Ollama pode ser conectado como serviço separado;
+para a entrega acadêmica, a inferência ocorre localmente.
 
 ```mermaid
 flowchart LR
     USER[Operador] -->|HTTPS| RUN[Cloud Run]
     RUN --> APP[FastAPI]
     REG[Artifact Registry] -->|imagem imutável| RUN
-    RUN -.-> SECRET[Secret Manager]
     RUN --> LOG[Cloud Logging]
-    APP -.-> OPENAI[OpenAI]
+    APP -.-> OLLAMA[Ollama + Qwen 2.5]
 ```
 
 Consulte o [guia de implantação](nuvem.md) para provisionamento, gestão de

@@ -17,7 +17,7 @@ pytestmark = pytest.mark.anyio
 
 @pytest.fixture
 def app() -> FastAPI:
-    """Cria aplicação sem acesso à OpenAI ou a serviços externos."""
+    """Cria aplicação sem acesso ao Ollama ou a serviços externos."""
     service = RouteApplicationService(DATA_DIR, RuleBasedProvider())
     return create_app(service=service)
 

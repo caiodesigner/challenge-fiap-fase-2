@@ -50,12 +50,24 @@ python -m ruff format .
 
 ## Executar a aplicação
 
+Instale o [Ollama](https://docs.ollama.com/quickstart) e baixe a LLM gratuita
+uma vez:
+
+```bash
+ollama pull qwen2.5:1.5b
+```
+
+Depois execute:
+
 ```bash
 python -m rotas_medicas.api
 ```
 
 A interface estará disponível em `http://127.0.0.1:8000` e a documentação da
 API em `http://127.0.0.1:8000/docs`.
+
+Para validar somente o restante da aplicação sem inferência, use
+`LLM_PROVIDER=local python -m rotas_medicas.api`.
 
 ## Entregáveis
 

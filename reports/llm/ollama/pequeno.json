@@ -1,90 +1,89 @@
 {
   "scenario_id": "pequeno",
   "provider": {
-    "name": "local",
-    "model": "rule-based-1.0",
+    "name": "ollama",
+    "model": "qwen2.5:1.5b",
     "prompt_version": "1.1",
-    "generated_at_utc": "2026-07-12T21:30:50.963440+00:00"
+    "generated_at_utc": "2026-07-12T22:05:22.811634+00:00"
   },
   "instructions": {
-    "title": "Instruções operacionais de entrega",
+    "title": "Instruções operacionais do plano otimizado",
     "general_guidance": [
-      "Confira carga e documentação antes da saída.",
-      "Comunique imediatamente qualquer impedimento à central."
+      "Registre a conclusão de cada entrega."
     ],
     "routes": [
       {
         "vehicle_id": "VEI-001",
-        "summary": "Realizar 4 entregas na ordem planejada.",
+        "summary": "Execute as entregas na ordem definida pelo otimizador.",
         "steps": [
           {
             "stop": 1,
             "delivery_id": "ENT-001",
             "destination": "Unidade de saúde fictícia 01",
             "priority": "critica",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Atenda esta entrega com prioridade operacional."
           },
           {
             "stop": 2,
             "delivery_id": "ENT-002",
             "destination": "Unidade de saúde fictícia 02",
             "priority": "alta",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Atenda esta entrega com prioridade operacional."
           },
           {
             "stop": 3,
             "delivery_id": "ENT-003",
             "destination": "Domicílio fictício 03",
             "priority": "normal",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Registre a conclusão da entrega."
           },
           {
             "stop": 4,
             "delivery_id": "ENT-004",
             "destination": "Unidade de saúde fictícia 04",
             "priority": "baixa",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Registre a conclusão da entrega."
           }
         ],
         "alerts": [
-          "Não alterar a sequência sem autorização da operação."
+          "Comunique qualquer impedimento à central de operação."
         ]
       },
       {
         "vehicle_id": "VEI-002",
-        "summary": "Realizar 4 entregas na ordem planejada.",
+        "summary": "Execute as entregas na ordem definida pelo otimizador.",
         "steps": [
           {
             "stop": 1,
             "delivery_id": "ENT-005",
             "destination": "Unidade de saúde fictícia 05",
             "priority": "critica",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Atenda esta entrega com prioridade operacional."
           },
           {
             "stop": 2,
             "delivery_id": "ENT-006",
             "destination": "Domicílio fictício 06",
             "priority": "alta",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Atenda esta entrega com prioridade operacional."
           },
           {
             "stop": 3,
             "delivery_id": "ENT-007",
             "destination": "Unidade de saúde fictícia 07",
             "priority": "normal",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Registre a conclusão da entrega."
           },
           {
             "stop": 4,
             "delivery_id": "ENT-008",
             "destination": "Unidade de saúde fictícia 08",
             "priority": "baixa",
-            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+            "instruction": "Registre a conclusão da entrega."
           }
         ],
         "alerts": [
-          "Não alterar a sequência sem autorização da operação."
+          "Comunique qualquer impedimento à central de operação."
         ]
       }
     ]
@@ -96,22 +95,26 @@
   },
   "report": {
     "period": "diario",
-    "title": "Relatório de eficiência das rotas",
-    "executive_summary": "O plano utiliza 2 veículos e percorre 17.01 km.",
+    "title": "Relatório Gerencial: Cenário Pequeno - Comparação com o Baseline",
+    "executive_summary": "O plano otimizado utiliza 2 veículo(s), percorre 17.01 km e tem custo operacional estimado de 173.80.",
     "highlights": [
-      "Comparação realizada contra vizinho_mais_proximo.",
-      "Variação de distância: 0.27 km; de custo: 0.38; de tempo estimado: 0.55 min."
+      "Comparação com vizinho_mais_proximo: economia de 0.27 km (1.58%).",
+      "Variação favorável de custo: 0.38 (0.22%).",
+      "Variação favorável de tempo estimado: 0.55 min (0.48%).",
+      "Veículos utilizados: 2; baseline: 2."
     ],
     "risks": [
-      "Estimativas não consideram trânsito em tempo real."
+      "O tempo calculado é estimado e não considera trânsito em tempo real.",
+      "Os cenários usam dados sintéticos e devem ser recalibrados com dados operacionais antes do uso real."
     ],
     "suggested_improvements": [
-      "Preservar a distribuição atual e acompanhar a distância realizada.",
-      "Comparar tempos estimados e realizados para calibrar a velocidade."
+      "Reavaliar a abordagem 'Vizinho Mais Proximo' em cenários maiores.",
+      "Implementar uma análise mais detalhada dos veículos disponíveis para otimização.",
+      "Considerar a possibilidade de adotar um modelo de entrega baseado em tempo, se disponível."
     ],
     "metrics_interpretation": [
-      "Custo operacional estimado: 173.80.",
-      "Economias negativas indicam desempenho inferior ao baseline."
+      "Valores positivos de economia representam melhora sobre o baseline; valores negativos representam piora.",
+      "O tempo é uma estimativa baseada em velocidade média e tempo de serviço, sem trânsito em tempo real."
     ],
     "comparison": {
       "baseline_name": "vizinho_mais_proximo",
@@ -133,13 +136,13 @@
     }
   },
   "question_answer": {
-    "answer": "Modo local de demonstração: consulte as rotas e métricas estruturadas para responder à pergunta: Quais veículos participam do plano de entregas?",
+    "answer": "Os veículos que participam do plano de entregas são: VEI-001 e VEI-002.",
     "evidence_delivery_ids": [],
     "evidence_vehicle_ids": [
       "VEI-001",
       "VEI-002"
     ],
-    "caveat": "Resposta gerada sem uma LLM externa."
+    "caveat": null
   },
   "answer_quality": {
     "score": 1.0,

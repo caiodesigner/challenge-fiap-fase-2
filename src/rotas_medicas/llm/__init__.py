@@ -2,12 +2,13 @@
 
 from rotas_medicas.llm.provider import (
     LLMProvider,
-    OpenAIResponsesProvider,
+    OllamaProvider,
     QueueProvider,
     RuleBasedProvider,
 )
 from rotas_medicas.llm.quality import QualityAssessment
 from rotas_medicas.llm.schemas import (
+    DriverGuidance,
     DriverInstructions,
     EfficiencyComparison,
     EfficiencyNarrative,
@@ -17,13 +18,14 @@ from rotas_medicas.llm.schemas import (
 from rotas_medicas.llm.service import LLMValidationError, RouteLanguageService
 
 __all__ = [
+    "DriverGuidance",
     "DriverInstructions",
     "EfficiencyComparison",
     "EfficiencyNarrative",
     "EfficiencyReport",
     "LLMProvider",
     "LLMValidationError",
-    "OpenAIResponsesProvider",
+    "OllamaProvider",
     "QualityAssessment",
     "QueueProvider",
     "RouteAnswer",
