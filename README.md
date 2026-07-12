@@ -67,3 +67,4 @@ tests/               # Testes automatizados
 - [Dados e cenários de demonstração](data/README.md)
 - [Algoritmo genético](docs/algoritmo-genetico.md)
 - [Fitness e restrições](docs/fitness-e-restricoes.md)
+- [Baselines e experimentos](docs/baselines-e-experimentos.md)

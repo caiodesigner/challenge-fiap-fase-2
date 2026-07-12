@@ -1,5 +1,11 @@
 """Distâncias, restrições e função fitness de roteamento."""
 
+from rotas_medicas.optimization.baselines import (
+    BASELINES,
+    nearest_neighbor,
+    original_order,
+    priority_distance,
+)
 from rotas_medicas.optimization.constraints import (
     FeasibilityIssue,
     find_feasibility_issues,
@@ -15,6 +21,7 @@ from rotas_medicas.optimization.fitness import (
 )
 
 __all__ = [
+    "BASELINES",
     "ConstraintViolation",
     "DistanceMatrix",
     "FeasibilityIssue",
@@ -25,4 +32,7 @@ __all__ = [
     "RoutingFitness",
     "find_feasibility_issues",
     "haversine_km",
+    "nearest_neighbor",
+    "original_order",
+    "priority_distance",
 ]
