@@ -4,8 +4,9 @@ Projeto do Tech Challenge — Fase 2 da FIAP para otimizar a distribuição de
 medicamentos e insumos por meio de algoritmos genéticos e produzir instruções e
 relatórios com apoio de LLMs.
 
-Nesta etapa, o repositório contém apenas a definição do problema e a fundação
-do projeto Python. As funcionalidades de negócio ainda não foram implementadas.
+O repositório contém a definição do problema, cenários sintéticos e o motor do
+algoritmo genético. A função de fitness e as demais funcionalidades de negócio
+serão incorporadas nas próximas etapas.
 
 ## Requisitos
 
@@ -64,3 +65,4 @@ tests/               # Testes automatizados
 
 - [Definição do problema e critérios](docs/definicao-do-problema.md)
 - [Dados e cenários de demonstração](data/README.md)
+- [Algoritmo genético](docs/algoritmo-genetico.md)
