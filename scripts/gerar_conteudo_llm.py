@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, cast
 
@@ -14,6 +15,7 @@ from rotas_medicas.llm import (
     RouteLanguageService,
     RuleBasedProvider,
 )
+from rotas_medicas.llm.prompts import PROMPT_VERSION
 from rotas_medicas.optimization import RoutingFitness
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,7 +33,12 @@ def parse_args() -> argparse.Namespace:
         choices=["pequeno", "medio"],
         default=["pequeno", "medio"],
     )
-    parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument(
+        "--period",
+        choices=["diario", "semanal"],
+        default="diario",
+    )
     return parser.parse_args()
 
 
@@ -50,7 +57,10 @@ def main() -> None:
     provider = (
         OpenAIResponsesProvider() if args.provider == "openai" else RuleBasedProvider()
     )
-    args.output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = args.output_dir or (
+        OUTPUT_DIR / "openai" if args.provider == "openai" else OUTPUT_DIR
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     for scenario_id in args.scenarios:
         problem = load_scenario(ROOT / "data" / f"cenario_{scenario_id}.json")
@@ -66,13 +76,22 @@ def main() -> None:
         evaluation = RoutingFitness(problem).evaluate(chromosome)
         service = RouteLanguageService(problem, chromosome, evaluation, provider)
         instructions, instructions_quality = service.generate_driver_instructions()
-        report = service.generate_efficiency_report("diario")
+        report = service.generate_efficiency_report(args.period)
         answer, answer_quality = service.answer_question(
             "Quais veículos participam do plano de entregas?"
         )
         payload = {
             "scenario_id": scenario_id,
-            "provider": args.provider,
+            "provider": {
+                "name": args.provider,
+                "model": (
+                    provider.model
+                    if isinstance(provider, OpenAIResponsesProvider)
+                    else "rule-based-1.0"
+                ),
+                "prompt_version": PROMPT_VERSION,
+                "generated_at_utc": datetime.now(UTC).isoformat(),
+            },
             "instructions": instructions.model_dump(mode="json"),
             "instructions_quality": {
                 "score": instructions_quality.score,
@@ -87,7 +106,7 @@ def main() -> None:
                 "issues": answer_quality.issues,
             },
         }
-        destination = args.output_dir / f"{scenario_id}.json"
+        destination = output_dir / f"{scenario_id}.json"
         destination.write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",

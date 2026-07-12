@@ -16,7 +16,7 @@ A solução combina:
 - mapas, indicadores, GeoJSON e convergência;
 - integração segura com LLM para instruções, relatórios e perguntas;
 - API FastAPI e interface web;
-- 91 testes automatizados e 94,11% de cobertura.
+- 110 testes automatizados e 94,22% de cobertura.
 
 Nos experimentos iniciais, a melhor configuração genética média reduziu o custo
 composto em 25,85% no cenário pequeno e 27,75% no médio em relação ao melhor
@@ -245,18 +245,22 @@ Os prompts versionados incluem:
 - dados delimitados em `<dados_json>`;
 - tarefa específica para instrução, relatório ou pergunta;
 - obrigação de declarar insuficiência de dados;
-- proibição de atribuir economia sem baseline.
+- comparação calculada contra o melhor baseline viável;
+- obrigação de fundamentar melhorias em métricas, cargas, prioridades e rotas.
 
 ### 9.4 Avaliação
 
 A avaliação determinística mede cobertura, sequência e validade das evidências.
-Os exemplos locais alcançaram 1,0 nessas métricas nos dois cenários. Isso não
-substitui avaliação humana de clareza e utilidade.
+Os exemplos locais alcançaram 1,0 nessas métricas nos dois cenários. O relatório
+inclui economia de distância, custo e tempo estimado calculada pelo sistema, sem
+delegar aritmética à LLM. A avaliação humana possui script próprio com notas de
+clareza, utilidade, segurança e fundamentação.
 
 Os artefatos em `reports/llm` foram gerados pelo modo local, não pela OpenAI. Uma
 chamada real exige `OPENAI_API_KEY` e deve ser executada pelo grupo antes da
 gravação do vídeo caso a demonstração externa seja desejada. Consulte
-[Integração com LLM](integracao-llm.md).
+[Integração com LLM](integracao-llm.md) e
+[Validação final antes do vídeo](demonstracao-final.md).
 
 ## 10. Interface e API
 
@@ -281,7 +285,7 @@ O pipeline local e o GitHub Actions executam:
 - cobertura mínima de 90%;
 - `pip check`.
 
-Estado documentado desta entrega: 91 testes aprovados e 94,11% de cobertura. Os
+Estado documentado desta entrega: 110 testes aprovados e 94,22% de cobertura. Os
 testes da API usam transporte ASGI; testes de LLM não acessam rede. Consulte
 [Testes e qualidade](testes-e-qualidade.md).
 

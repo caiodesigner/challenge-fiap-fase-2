@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from rotas_medicas.llm.schemas import (
     DeliveryStep,
     DriverInstructions,
-    EfficiencyReport,
+    EfficiencyNarrative,
     RouteAnswer,
     VehicleInstructions,
 )
@@ -114,7 +114,7 @@ class RuleBasedProvider:
         context = _extract_context(user_prompt)
         if response_model is DriverInstructions:
             response: BaseModel = _rule_based_instructions(context)
-        elif response_model is EfficiencyReport:
+        elif response_model is EfficiencyNarrative:
             response = _rule_based_report(context)
         elif response_model is RouteAnswer:
             response = _rule_based_answer(context)
@@ -171,11 +171,20 @@ def _rule_based_instructions(context: dict[str, object]) -> DriverInstructions:
     )
 
 
-def _rule_based_report(context: dict[str, object]) -> EfficiencyReport:
+def _rule_based_report(context: dict[str, object]) -> EfficiencyNarrative:
     metrics = cast(dict[str, object], context["metricas"])
+    comparison = cast(dict[str, object], context["comparacao_baseline"])
     distance = _as_float(metrics["distancia_total_km"])
     operating_cost = _as_float(metrics["custo_operacional"])
-    return EfficiencyReport.model_validate(
+    distance_savings = _as_float(comparison["economia_distancia_km"])
+    cost_savings = _as_float(comparison["economia_custo"])
+    time_savings = _as_float(comparison["economia_tempo_min"])
+    distance_pattern = (
+        "Preservar a distribuição atual e acompanhar a distância realizada."
+        if distance_savings >= 0
+        else "Revisar a sequência para recuperar a distância superior ao baseline."
+    )
+    return EfficiencyNarrative.model_validate(
         {
             "period": context.get("periodo", "diario"),
             "title": "Relatório de eficiência das rotas",
@@ -183,13 +192,19 @@ def _rule_based_report(context: dict[str, object]) -> EfficiencyReport:
                 f"O plano utiliza {metrics['veiculos_utilizados']} veículos e "
                 f"percorre {distance:.2f} km."
             ),
-            "highlights": ("Todas as métricas foram calculadas pelo otimizador.",),
+            "highlights": (
+                f"Comparação realizada contra {comparison['abordagem']}.",
+                f"Variação de distância: {distance_savings:.2f} km; de custo: "
+                f"{cost_savings:.2f}; de tempo estimado: {time_savings:.2f} min.",
+            ),
             "risks": ("Estimativas não consideram trânsito em tempo real.",),
             "suggested_improvements": (
-                "Comparar o planejado com os tempos reais após as entregas.",
+                distance_pattern,
+                "Comparar tempos estimados e realizados para calibrar a velocidade.",
             ),
             "metrics_interpretation": (
                 f"Custo operacional estimado: {operating_cost:.2f}.",
+                "Economias negativas indicam desempenho inferior ao baseline.",
             ),
         }
     )

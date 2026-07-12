@@ -7,9 +7,12 @@ from typing import Any, Literal
 
 from rotas_medicas.domain import RoutingProblem
 from rotas_medicas.genetic import RouteChromosome
-from rotas_medicas.optimization import FitnessEvaluation
+from rotas_medicas.optimization import (
+    FitnessEvaluation,
+    compare_with_best_baseline,
+)
 
-PROMPT_VERSION = "1.0"
+PROMPT_VERSION = "1.1"
 SYSTEM_PROMPT = """Você é um assistente de logística hospitalar.
 Use exclusivamente os dados estruturados fornecidos pelo sistema.
 Não invente entregas, veículos, métricas, horários, endereços ou restrições.
@@ -28,6 +31,7 @@ def route_context(
 ) -> dict[str, Any]:
     """Seleciona somente fatos calculados necessários para a LLM."""
     deliveries = problem.deliveries_by_id
+    comparison = compare_with_best_baseline(problem, evaluation)
     routes = []
     for index, delivery_ids in enumerate(chromosome.routes):
         vehicle = problem.vehicles[index]
@@ -66,6 +70,28 @@ def route_context(
             "fitness": round(evaluation.total_cost, 6),
             "penalidades": evaluation.penalty_cost,
         },
+        "comparacao_baseline": {
+            "abordagem": comparison.baseline_name,
+            "distancia_otimizada_km": comparison.optimized_distance_km,
+            "distancia_baseline_km": comparison.baseline_distance_km,
+            "economia_distancia_km": comparison.distance_savings_km,
+            "economia_distancia_percentual": comparison.distance_savings_percent,
+            "custo_otimizado": comparison.optimized_operating_cost,
+            "custo_baseline": comparison.baseline_operating_cost,
+            "economia_custo": comparison.operating_cost_savings,
+            "economia_custo_percentual": (comparison.operating_cost_savings_percent),
+            "tempo_otimizado_estimado_min": comparison.optimized_estimated_minutes,
+            "tempo_baseline_estimado_min": comparison.baseline_estimated_minutes,
+            "economia_tempo_min": comparison.time_savings_minutes,
+            "economia_tempo_percentual": comparison.time_savings_percent,
+            "veiculos_otimizados": comparison.optimized_vehicles,
+            "veiculos_baseline": comparison.baseline_vehicles,
+            "veiculos_economizados": comparison.vehicles_saved,
+            "hipoteses_tempo": {
+                "velocidade_media_kmh": 30.0,
+                "servico_por_entrega_min": 10.0,
+            },
+        },
         "rotas": routes,
     }
 
@@ -92,8 +118,11 @@ def report_prompt(
     """Solicita análise gerencial fundamentada nas métricas calculadas."""
     enriched = {**context, "periodo": period}
     return _with_context(
-        "Produza um relatório gerencial. Diferencie fatos dos dados e sugestões. "
-        "Não atribua economia de tempo ou recursos sem um baseline fornecido.",
+        "Produza um relatório gerencial. Interprete a comparação com o baseline, "
+        "incluindo economia de distância, custo, tempo estimado e veículos. Valores "
+        "negativos representam piora, não economia. Fundamente as sugestões em "
+        "padrões presentes nas métricas, cargas, prioridades e rotas. Diferencie "
+        "fatos calculados de recomendações e não recalcule nenhum valor.",
         enriched,
     )
 

@@ -149,8 +149,8 @@ Abrir `/docs` e mostrar os endpoints sem executar todos.
 
 Mostrar terminal com resultado de `make check`:
 
-- 91 testes;
-- 94,11% de cobertura;
+- 110 testes;
+- 94,22% de cobertura;
 - Ruff;
 - mypy estrito;
 - pipeline GitHub Actions.

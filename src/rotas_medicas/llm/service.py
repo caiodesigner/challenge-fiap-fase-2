@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import asdict
 from typing import Literal
 
 from rotas_medicas.domain import RoutingProblem
@@ -21,10 +22,15 @@ from rotas_medicas.llm.quality import (
 )
 from rotas_medicas.llm.schemas import (
     DriverInstructions,
+    EfficiencyComparison,
+    EfficiencyNarrative,
     EfficiencyReport,
     RouteAnswer,
 )
-from rotas_medicas.optimization import FitnessEvaluation
+from rotas_medicas.optimization import (
+    FitnessEvaluation,
+    compare_with_best_baseline,
+)
 
 
 class LLMValidationError(ValueError):
@@ -68,10 +74,15 @@ class RouteLanguageService:
         period: Literal["diario", "semanal"] = "diario",
     ) -> EfficiencyReport:
         """Gera relatório sem aceitar métricas calculadas pelo modelo."""
-        return self._provider.generate(
+        narrative = self._provider.generate(
             system_prompt=SYSTEM_PROMPT,
             user_prompt=report_prompt(self._context, period),
-            response_model=EfficiencyReport,
+            response_model=EfficiencyNarrative,
+        )
+        comparison = compare_with_best_baseline(self._problem, self._evaluation)
+        return EfficiencyReport(
+            **narrative.model_dump(),
+            comparison=EfficiencyComparison.model_validate(asdict(comparison)),
         )
 
     def answer_question(

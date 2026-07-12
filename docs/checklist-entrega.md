@@ -33,13 +33,16 @@
 - [x] Adaptador real OpenAI implementado.
 - [x] Structured Outputs e validação semântica.
 - [x] Testes sem rede.
+- [x] Comparação determinística com baseline no relatório.
+- [x] Economia de distância, custo, tempo e veículos.
+- [x] Script para registrar avaliação humana.
 - [ ] Configurar `OPENAI_API_KEY` fora do repositório.
 - [ ] Executar e revisar uma amostra real da OpenAI.
 - [ ] Registrar avaliação humana de clareza, utilidade e segurança.
 
-Os três itens pendentes são necessários somente para apresentar evidência de uma
-execução externa real. Os JSONs atuais em `reports/llm` identificam corretamente
-o provedor `local`.
+Os três itens pendentes dependem da chave e da revisão do grupo. Os JSONs atuais
+em `reports/llm` identificam corretamente o provedor local; uma execução OpenAI
+será gravada separadamente em `reports/llm/openai`.
 
 ## Vídeo
 

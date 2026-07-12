@@ -40,8 +40,8 @@ class DriverInstructions(StrictModel):
     routes: tuple[VehicleInstructions, ...]
 
 
-class EfficiencyReport(StrictModel):
-    """Relatório gerencial diário ou semanal."""
+class EfficiencyNarrative(StrictModel):
+    """Interpretação gerencial produzida pelo provedor de linguagem."""
 
     period: Literal["diario", "semanal"]
     title: str = Field(min_length=1)
@@ -50,6 +50,33 @@ class EfficiencyReport(StrictModel):
     risks: tuple[str, ...]
     suggested_improvements: tuple[str, ...]
     metrics_interpretation: tuple[str, ...]
+
+
+class EfficiencyComparison(StrictModel):
+    """Economias calculadas pelo sistema, nunca pela LLM."""
+
+    baseline_name: str
+    optimized_distance_km: float
+    baseline_distance_km: float
+    distance_savings_km: float
+    distance_savings_percent: float
+    optimized_operating_cost: float
+    baseline_operating_cost: float
+    operating_cost_savings: float
+    operating_cost_savings_percent: float
+    optimized_estimated_minutes: float
+    baseline_estimated_minutes: float
+    time_savings_minutes: float
+    time_savings_percent: float
+    optimized_vehicles: int
+    baseline_vehicles: int
+    vehicles_saved: int
+
+
+class EfficiencyReport(EfficiencyNarrative):
+    """Relatório final com narrativa e comparação determinística."""
+
+    comparison: EfficiencyComparison
 
 
 class RouteAnswer(StrictModel):

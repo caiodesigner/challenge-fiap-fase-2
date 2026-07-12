@@ -6,6 +6,10 @@ from rotas_medicas.optimization.baselines import (
     original_order,
     priority_distance,
 )
+from rotas_medicas.optimization.comparison import (
+    BaselineComparison,
+    compare_with_best_baseline,
+)
 from rotas_medicas.optimization.constraints import (
     FeasibilityIssue,
     find_feasibility_issues,
@@ -22,6 +26,7 @@ from rotas_medicas.optimization.fitness import (
 
 __all__ = [
     "BASELINES",
+    "BaselineComparison",
     "ConstraintViolation",
     "DistanceMatrix",
     "FeasibilityIssue",
@@ -30,6 +35,7 @@ __all__ = [
     "FitnessWeights",
     "RouteMetrics",
     "RoutingFitness",
+    "compare_with_best_baseline",
     "find_feasibility_issues",
     "haversine_km",
     "nearest_neighbor",

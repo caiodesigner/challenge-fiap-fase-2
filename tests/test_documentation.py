@@ -12,6 +12,7 @@ REQUIRED_DELIVERABLES = (
     "docs/relatorio-tecnico.md",
     "docs/arquitetura.md",
     "docs/api.md",
+    "docs/demonstracao-final.md",
     "docs/evolucao-codigo-base.md",
     "docs/roteiro-video.md",
     "docs/checklist-entrega.md",

@@ -63,6 +63,7 @@ def test_optimizes_stores_and_explains_solution(
     assert instruction_quality.valid
     assert instructions.routes
     assert report.period == "diario"
+    assert report.comparison.baseline_name
     assert answer_quality.valid
     assert answer.evidence_vehicle_ids
 

@@ -1,6 +1,11 @@
 {
   "scenario_id": "medio",
-  "provider": "local",
+  "provider": {
+    "name": "local",
+    "model": "rule-based-1.0",
+    "prompt_version": "1.1",
+    "generated_at_utc": "2026-07-12T20:53:46.971974+00:00"
+  },
   "instructions": {
     "title": "Instruções operacionais de entrega",
     "general_guidance": [
@@ -275,17 +280,38 @@
     "title": "Relatório de eficiência das rotas",
     "executive_summary": "O plano utiliza 5 veículos e percorre 93.93 km.",
     "highlights": [
-      "Todas as métricas foram calculadas pelo otimizador."
+      "Comparação realizada contra vizinho_mais_proximo.",
+      "Variação de distância: 2.53 km; de custo: 2.60; de tempo estimado: 5.05 min."
     ],
     "risks": [
       "Estimativas não consideram trânsito em tempo real."
     ],
     "suggested_improvements": [
-      "Comparar o planejado com os tempos reais após as entregas."
+      "Preservar a distribuição atual e acompanhar a distância realizada.",
+      "Comparar tempos estimados e realizados para calibrar a velocidade."
     ],
     "metrics_interpretation": [
-      "Custo operacional estimado: 683.27."
-    ]
+      "Custo operacional estimado: 683.27.",
+      "Economias negativas indicam desempenho inferior ao baseline."
+    ],
+    "comparison": {
+      "baseline_name": "vizinho_mais_proximo",
+      "optimized_distance_km": 93.9334,
+      "baseline_distance_km": 96.4597,
+      "distance_savings_km": 2.5263,
+      "distance_savings_percent": 2.62,
+      "optimized_operating_cost": 683.2686,
+      "baseline_operating_cost": 685.8736,
+      "operating_cost_savings": 2.605,
+      "operating_cost_savings_percent": 0.38,
+      "optimized_estimated_minutes": 487.87,
+      "baseline_estimated_minutes": 492.92,
+      "time_savings_minutes": 5.05,
+      "time_savings_percent": 1.03,
+      "optimized_vehicles": 5,
+      "baseline_vehicles": 5,
+      "vehicles_saved": 0
+    }
   },
   "question_answer": {
     "answer": "Modo local de demonstração: consulte as rotas e métricas estruturadas para responder à pergunta: Quais veículos participam do plano de entregas?",

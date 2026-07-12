@@ -103,6 +103,7 @@ async def test_exposes_all_llm_actions(app: FastAPI) -> None:
     assert instructions.status_code == 200
     assert instructions.json()["quality"]["valid"]
     assert report.json()["content"]["period"] == "semanal"
+    assert report.json()["content"]["comparison"]["baseline_name"]
     assert answer.json()["quality"]["valid"]
 
 

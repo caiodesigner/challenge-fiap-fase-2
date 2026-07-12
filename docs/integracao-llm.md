@@ -69,7 +69,7 @@ Os dados são delimitados por `<dados_json>` e explicitamente tratados como
 dados, não como instruções. A pergunta do usuário também fica dentro desse
 contexto, reduzindo o risco de uma pergunta alterar as regras do sistema.
 
-Cada tarefa possui um prompt próprio e versionado. A versão atual é `1.0`.
+Cada tarefa possui um prompt próprio e versionado. A versão atual é `1.1`.
 
 ## Respostas estruturadas
 
@@ -80,8 +80,15 @@ informa ordem, entrega, destino, prioridade e instrução operacional.
 
 ### Relatório
 
-`EfficiencyReport` contém resumo executivo, destaques, riscos, sugestões e
-interpretação de métricas. O prompt proíbe alegar economia sem dados de baseline.
+O sistema avalia os três baselines e seleciona o plano viável de menor fitness.
+Em seguida, calcula distância, custo, tempo estimado e veículos para a solução
+genética e a referência. Economias absolutas e percentuais são anexadas ao
+`EfficiencyReport` como `EfficiencyComparison`.
+
+A LLM recebe esses dados para produzir `EfficiencyNarrative`, com resumo,
+destaques, riscos, interpretação e sugestões fundamentadas em métricas, cargas,
+prioridades e rotas. Ela não calcula nem pode substituir os números da
+comparação. Valores negativos são apresentados como piora.
 
 ### Perguntas
 
@@ -102,8 +109,8 @@ perguntas são avaliadas pela validade dos IDs de evidência. A validação é
 determinística e ocorre depois da validação estrutural do Pydantic.
 
 Essas métricas medem fundamentação estrutural, não qualidade linguística ou
-utilidade percebida. Uma avaliação humana continua necessária no relatório
-técnico final.
+utilidade percebida. `scripts/avaliar_conteudo_llm.py` registra avaliação humana
+de clareza, utilidade, segurança e fundamentação em escala de 1 a 5.
 
 ## Privacidade e segurança
 
@@ -123,7 +130,8 @@ O modo padrão não realiza chamada externa:
 python scripts/gerar_conteudo_llm.py
 ```
 
-Os arquivos ficam em `reports/llm` e identificam o provedor como `local`.
+Os arquivos ficam em `reports/llm` e registram provedor, implementação local,
+versão do prompt e horário de geração.
 
 ## Execução com OpenAI
 
@@ -135,5 +143,7 @@ export OPENAI_MODEL="gpt-5.6"
 python scripts/gerar_conteudo_llm.py --provider openai
 ```
 
-Essa execução utiliza a API e pode gerar custos. Ela não é necessária para a
-suíte automatizada, que nunca acessa a rede.
+As evidências externas ficam em `reports/llm/openai`, sem sobrescrever exemplos
+locais. Essa execução utiliza a API e pode gerar custos; a suíte automatizada
+nunca acessa a rede. Execute o procedimento completo em
+[Validação final antes do vídeo](demonstracao-final.md).

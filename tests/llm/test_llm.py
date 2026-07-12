@@ -10,7 +10,7 @@ from rotas_medicas.domain import RoutingProblem
 from rotas_medicas.genetic import RouteChromosome
 from rotas_medicas.llm import (
     DriverInstructions,
-    EfficiencyReport,
+    EfficiencyNarrative,
     LLMValidationError,
     OpenAIResponsesProvider,
     QueueProvider,
@@ -71,6 +71,8 @@ def test_context_contains_only_calculated_route_facts(
 
     assert context["versao_prompt"] == PROMPT_VERSION
     assert context["metricas"]["plano_viavel"] is True
+    assert context["comparacao_baseline"]["abordagem"]
+    assert "economia_tempo_min" in context["comparacao_baseline"]
     assert context["rotas"][0]["paradas"][0]["entrega_id"] == "ENT-001"
     assert "Não altere nem recalcule" in SYSTEM_PROMPT
 
@@ -81,7 +83,7 @@ def test_service_generates_and_validates_all_use_cases(
     """Instruções, relatório e resposta devem cumprir seus contratos."""
     chromosome, fitness = plan(small_problem)
     instructions = valid_instructions(small_problem, chromosome)
-    report = EfficiencyReport(
+    report = EfficiencyNarrative(
         period="diario",
         title="Relatório",
         executive_summary="Plano viável.",
@@ -108,7 +110,10 @@ def test_service_generates_and_validates_all_use_cases(
 
     assert generated_instructions == instructions
     assert instruction_quality.score == 1
-    assert generated_report == report
+    assert generated_report.period == report.period
+    assert generated_report.title == report.title
+    assert generated_report.comparison.baseline_name
+    assert generated_report.comparison.baseline_distance_km > 0
     assert generated_answer == answer
     assert answer_quality.valid
     assert len(provider.requests) == 3
@@ -175,6 +180,8 @@ def test_rule_based_provider_supports_offline_demonstration(
 
     assert quality.valid
     assert report.period == "semanal"
+    assert report.comparison.baseline_name
+    assert report.comparison.optimized_estimated_minutes > 0
     assert answer.caveat == "Resposta gerada sem uma LLM externa."
     assert instructions.routes
 

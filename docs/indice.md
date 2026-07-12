@@ -7,6 +7,7 @@
 - [Arquitetura](arquitetura.md)
 - [Documentação da API](api.md)
 - [Roteiro do vídeo](roteiro-video.md)
+- [Validação final antes do vídeo](demonstracao-final.md)
 - [Checklist de entrega](checklist-entrega.md)
 - [Implantação opcional no Google Cloud](nuvem.md)
 

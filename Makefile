@@ -1,4 +1,4 @@
-.PHONY: install format lint type test check run experiments visualizations llm-demo container
+.PHONY: install format lint type test check run experiments visualizations llm-demo llm-openai-demo container
 
 PYTHON := .venv/bin/python
 
@@ -34,6 +34,10 @@ visualizations:
 
 llm-demo:
 	$(PYTHON) scripts/gerar_conteudo_llm.py
+
+llm-openai-demo:
+	@test -n "$(OPENAI_API_KEY)" || (echo "Defina OPENAI_API_KEY no ambiente." && exit 1)
+	$(PYTHON) scripts/gerar_conteudo_llm.py --provider openai --scenarios pequeno
 
 container:
 	docker build -t rotas-medicas:local .
