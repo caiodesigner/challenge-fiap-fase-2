@@ -11,7 +11,10 @@ from rotas_medicas.genetic.operators import (
     relocation_mutation,
     swap_mutation,
 )
-from rotas_medicas.genetic.population import create_initial_population
+from rotas_medicas.genetic.population import (
+    create_initial_population,
+    create_random_chromosome,
+)
 
 DELIVERIES = tuple(f"E{index}" for index in range(10))
 
@@ -75,3 +78,27 @@ def test_crossover_rejects_incompatible_parents() -> None:
 
     with pytest.raises(ValueError, match="mesmo conjunto"):
         order_crossover(first, second, random.Random(1))
+
+
+@pytest.mark.parametrize(
+    ("deliveries", "vehicles", "message"),
+    [
+        ((), 1, "ao menos uma entrega"),
+        (("A", "A"), 1, "devem ser únicos"),
+        (("A",), 0, "ao menos um veículo"),
+    ],
+)
+def test_random_chromosome_rejects_invalid_inputs(
+    deliveries: tuple[str, ...],
+    vehicles: int,
+    message: str,
+) -> None:
+    """A população não deve mascarar uma instância estruturalmente inválida."""
+    with pytest.raises(ValueError, match=message):
+        create_random_chromosome(deliveries, vehicles, random.Random(1))
+
+
+def test_initial_population_rejects_non_positive_size() -> None:
+    """Uma população vazia não pode iniciar a evolução."""
+    with pytest.raises(ValueError, match="deve ser positivo"):
+        create_initial_population(("A",), 1, 0, random.Random(1))

@@ -36,6 +36,12 @@ python -m mypy
 python -m pytest
 ```
 
+Ou execute todo o pipeline local:
+
+```bash
+make check
+```
+
 Para aplicar a formatação automaticamente:
 
 ```bash
@@ -80,3 +86,4 @@ tests/               # Testes automatizados
 - [Visualizações](docs/visualizacoes.md)
 - [Integração com LLM](docs/integracao-llm.md)
 - [Interface da solução](docs/interface-da-solucao.md)
+- [Testes e qualidade](docs/testes-e-qualidade.md)

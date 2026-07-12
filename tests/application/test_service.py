@@ -84,3 +84,9 @@ def test_rejects_unknown_solution(service: RouteApplicationService) -> None:
     """IDs efêmeros inexistentes devem falhar claramente."""
     with pytest.raises(SolutionNotFoundError):
         service.get_solution("inexistente")
+
+
+def test_rejects_empty_scenario_catalog(tmp_path: Path) -> None:
+    """Aplicação não deve iniciar silenciosamente sem dados."""
+    with pytest.raises(ValueError, match="Nenhum cenário"):
+        RouteApplicationService(tmp_path, RuleBasedProvider())
