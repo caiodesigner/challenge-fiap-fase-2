@@ -1,0 +1,32 @@
+# Ambientes e dependências Python
+.venv/
+venv/
+
+# Bytecode e caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Build e distribuição
+build/
+dist/
+*.egg-info/
+
+# Ambientes e segredos
+.env
+.env.*
+!.env.example
+
+# IDEs e sistema operacional
+.idea/
+.vscode/
+.DS_Store
+
+# Artefatos gerados pelo projeto
+outputs/
+reports/generated/
