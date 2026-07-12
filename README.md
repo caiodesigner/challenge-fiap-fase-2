@@ -66,3 +66,4 @@ tests/               # Testes automatizados
 - [Definição do problema e critérios](docs/definicao-do-problema.md)
 - [Dados e cenários de demonstração](data/README.md)
 - [Algoritmo genético](docs/algoritmo-genetico.md)
+- [Fitness e restrições](docs/fitness-e-restricoes.md)
