@@ -69,3 +69,4 @@ tests/               # Testes automatizados
 - [Fitness e restrições](docs/fitness-e-restricoes.md)
 - [Baselines e experimentos](docs/baselines-e-experimentos.md)
 - [Visualizações](docs/visualizacoes.md)
+- [Integração com LLM](docs/integracao-llm.md)

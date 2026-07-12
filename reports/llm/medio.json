@@ -1,0 +1,307 @@
+{
+  "scenario_id": "medio",
+  "provider": "local",
+  "instructions": {
+    "title": "Instruções operacionais de entrega",
+    "general_guidance": [
+      "Confira carga e documentação antes da saída.",
+      "Comunique imediatamente qualquer impedimento à central."
+    ],
+    "routes": [
+      {
+        "vehicle_id": "VEI-001",
+        "summary": "Realizar 7 entregas na ordem planejada.",
+        "steps": [
+          {
+            "stop": 1,
+            "delivery_id": "ENT-002",
+            "destination": "Unidade de saúde fictícia 02",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 2,
+            "delivery_id": "ENT-005",
+            "destination": "Unidade de saúde fictícia 05",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 3,
+            "delivery_id": "ENT-004",
+            "destination": "Unidade de saúde fictícia 04",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 4,
+            "delivery_id": "ENT-003",
+            "destination": "Domicílio fictício 03",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 5,
+            "delivery_id": "ENT-030",
+            "destination": "Domicílio fictício 30",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 6,
+            "delivery_id": "ENT-027",
+            "destination": "Domicílio fictício 27",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 7,
+            "delivery_id": "ENT-028",
+            "destination": "Unidade de saúde fictícia 28",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          }
+        ],
+        "alerts": [
+          "Não alterar a sequência sem autorização da operação."
+        ]
+      },
+      {
+        "vehicle_id": "VEI-002",
+        "summary": "Realizar 6 entregas na ordem planejada.",
+        "steps": [
+          {
+            "stop": 1,
+            "delivery_id": "ENT-029",
+            "destination": "Unidade de saúde fictícia 29",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 2,
+            "delivery_id": "ENT-001",
+            "destination": "Unidade de saúde fictícia 01",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 3,
+            "delivery_id": "ENT-006",
+            "destination": "Domicílio fictício 06",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 4,
+            "delivery_id": "ENT-007",
+            "destination": "Unidade de saúde fictícia 07",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 5,
+            "delivery_id": "ENT-008",
+            "destination": "Unidade de saúde fictícia 08",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 6,
+            "delivery_id": "ENT-012",
+            "destination": "Domicílio fictício 12",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          }
+        ],
+        "alerts": [
+          "Não alterar a sequência sem autorização da operação."
+        ]
+      },
+      {
+        "vehicle_id": "VEI-003",
+        "summary": "Realizar 7 entregas na ordem planejada.",
+        "steps": [
+          {
+            "stop": 1,
+            "delivery_id": "ENT-022",
+            "destination": "Unidade de saúde fictícia 22",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 2,
+            "delivery_id": "ENT-021",
+            "destination": "Domicílio fictício 21",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 3,
+            "delivery_id": "ENT-025",
+            "destination": "Unidade de saúde fictícia 25",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 4,
+            "delivery_id": "ENT-026",
+            "destination": "Unidade de saúde fictícia 26",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 5,
+            "delivery_id": "ENT-024",
+            "destination": "Domicílio fictício 24",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 6,
+            "delivery_id": "ENT-023",
+            "destination": "Unidade de saúde fictícia 23",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 7,
+            "delivery_id": "ENT-020",
+            "destination": "Unidade de saúde fictícia 20",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          }
+        ],
+        "alerts": [
+          "Não alterar a sequência sem autorização da operação."
+        ]
+      },
+      {
+        "vehicle_id": "VEI-004",
+        "summary": "Realizar 6 entregas na ordem planejada.",
+        "steps": [
+          {
+            "stop": 1,
+            "delivery_id": "ENT-018",
+            "destination": "Domicílio fictício 18",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 2,
+            "delivery_id": "ENT-019",
+            "destination": "Unidade de saúde fictícia 19",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 3,
+            "delivery_id": "ENT-017",
+            "destination": "Unidade de saúde fictícia 17",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 4,
+            "delivery_id": "ENT-016",
+            "destination": "Unidade de saúde fictícia 16",
+            "priority": "baixa",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 5,
+            "delivery_id": "ENT-014",
+            "destination": "Unidade de saúde fictícia 14",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 6,
+            "delivery_id": "ENT-011",
+            "destination": "Unidade de saúde fictícia 11",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          }
+        ],
+        "alerts": [
+          "Não alterar a sequência sem autorização da operação."
+        ]
+      },
+      {
+        "vehicle_id": "VEI-005",
+        "summary": "Realizar 4 entregas na ordem planejada.",
+        "steps": [
+          {
+            "stop": 1,
+            "delivery_id": "ENT-009",
+            "destination": "Domicílio fictício 09",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 2,
+            "delivery_id": "ENT-010",
+            "destination": "Unidade de saúde fictícia 10",
+            "priority": "alta",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 3,
+            "delivery_id": "ENT-013",
+            "destination": "Unidade de saúde fictícia 13",
+            "priority": "critica",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          },
+          {
+            "stop": 4,
+            "delivery_id": "ENT-015",
+            "destination": "Domicílio fictício 15",
+            "priority": "normal",
+            "instruction": "Confirme o identificador da entrega e registre a conclusão antes de seguir para a próxima parada."
+          }
+        ],
+        "alerts": [
+          "Não alterar a sequência sem autorização da operação."
+        ]
+      }
+    ]
+  },
+  "instructions_quality": {
+    "score": 1.0,
+    "valid": true,
+    "issues": []
+  },
+  "report": {
+    "period": "diario",
+    "title": "Relatório de eficiência das rotas",
+    "executive_summary": "O plano utiliza 5 veículos e percorre 93.93 km.",
+    "highlights": [
+      "Todas as métricas foram calculadas pelo otimizador."
+    ],
+    "risks": [
+      "Estimativas não consideram trânsito em tempo real."
+    ],
+    "suggested_improvements": [
+      "Comparar o planejado com os tempos reais após as entregas."
+    ],
+    "metrics_interpretation": [
+      "Custo operacional estimado: 683.27."
+    ]
+  },
+  "question_answer": {
+    "answer": "Modo local de demonstração: consulte as rotas e métricas estruturadas para responder à pergunta: Quais veículos participam do plano de entregas?",
+    "evidence_delivery_ids": [],
+    "evidence_vehicle_ids": [
+      "VEI-001",
+      "VEI-002",
+      "VEI-003",
+      "VEI-004",
+      "VEI-005"
+    ],
+    "caveat": "Resposta gerada sem uma LLM externa."
+  },
+  "answer_quality": {
+    "score": 1.0,
+    "valid": true,
+    "issues": []
+  }
+}
