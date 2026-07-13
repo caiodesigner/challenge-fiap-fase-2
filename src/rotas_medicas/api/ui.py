@@ -20,6 +20,17 @@ input,select,textarea,button{width:100%;padding:10px;border:1px solid #cbd5e1;
 border-radius:7px;font:inherit}button{margin-top:14px;border:0;background:var(--brand);
 color:#fff;font-weight:700;cursor:pointer}button.secondary{background:#e0e7ff;color:#3730a3}
 button:disabled{opacity:.55;cursor:wait}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.button-content{display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.spinner{width:18px;height:18px;border:3px solid #ffffff66;border-top-color:#fff;
+border-radius:50%;animation:spin .75s linear infinite}.secondary .spinner{
+border-color:#a5b4fc;border-top-color:#3730a3}.loading{position:fixed;inset:0;
+z-index:2000;display:grid;place-items:center;background:#0f172a80;backdrop-filter:blur(2px)}
+.loading-card{width:min(420px,calc(100% - 32px));padding:26px;text-align:center;
+background:#fff;border-radius:14px;box-shadow:0 20px 50px #0f172a4d}.loading-card .spinner{
+width:42px;height:42px;margin:0 auto 15px;border-width:5px;border-color:#c7d2fe;
+border-top-color:var(--brand)}.loading-card strong{display:block;font-size:18px}
+.loading-card p{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+@keyframes spin{to{transform:rotate(360deg)}}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
 .card,.panel{background:var(--card);border-radius:10px;box-shadow:0 2px 14px #0f172a0d}
 .card{padding:15px}.card span{display:block;font-size:11px;color:var(--muted)}
@@ -53,6 +64,11 @@ placeholder="Quais veículos atendem entregas críticas?"></textarea>
 <div id="map"></div><div class="panel"><h2>Rotas</h2><div id="routes"></div></div>
 <div class="panel hidden" id="assistantPanel"><h2>Resposta do assistente</h2>
 <pre id="assistantOutput"></pre></div></section></main></div>
+<div id="optimizationLoading" class="loading hidden" role="status" aria-live="assertive"
+aria-label="Otimização em andamento"><div class="loading-card"><div class="spinner"></div>
+<strong id="loadingTitle">Otimizando as rotas</strong>
+<p id="loadingDetail">Executando o algoritmo genético…</p>
+</div></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 let solutionId=null,map=null,routeLayer=null;const $=id=>document.getElementById(id);
 async function api(path,options={}){const response=await fetch(path,{headers:{
@@ -78,16 +94,38 @@ $('routes').innerHTML=data.routes.filter(r=>r.stops.length).map(r=>`<div class="
 `<div class="muted">${r.stops.length} entregas · ${r.distance_km.toFixed(2)} km · `+
 `carga ${r.load}/${r.capacity}</div><div class="bar"><i style="width:${Math.min(100,r.load_usage_percent)}%"></i></div></div>`).join('');
 renderMap(data.geojson)}
-async function optimize(){const button=$('optimize');button.disabled=true;$('status').textContent='Otimizando…';
+function setOptimizing(active){const button=$('optimize'),controls=['scenario','population',
+'generations','mutation','seed'];controls.forEach(id=>$(id).disabled=active);button.disabled=active;
+$('optimizationLoading').classList.toggle('hidden',!active);button.innerHTML=active?
+'<span class="button-content"><span class="spinner"></span>Otimizando…</span>':'Otimizar rotas';
+if(active){$('loadingTitle').textContent='Otimizando as rotas';
+$('optimizationLoading').setAttribute('aria-label','Otimização em andamento');
+$('loadingDetail').textContent=`População ${$('population').value} · até `+
+`${$('generations').value} gerações. Aguarde a melhor solução viável.`}}
+async function optimize(){setOptimizing(true);$('status').textContent='Executando algoritmo genético…';
 try{const data=await api('/api/optimize',{method:'POST',body:JSON.stringify({scenario_id:$('scenario').value,
 population_size:+$('population').value,max_generations:+$('generations').value,
 mutation_rate:+$('mutation').value,seed:+$('seed').value})});render(data);$('status').textContent=
 `Concluído em ${data.metrics.generations_executed} gerações.`}catch(e){$('status').innerHTML=
-`<span class="error">${e.message}</span>`}finally{button.disabled=false}}
-async function llmAction(path,body){if(!solutionId)return;try{const data=await api(
+`<span class="error">${e.message}</span>`}finally{setOptimizing(false)}}
+const assistantActions={instructions:{button:'instructions',idle:'Gerar instruções',busy:'Gerando…',
+title:'Gerando instruções',detail:'O Ollama está preparando orientações para motoristas e equipes de entrega.'},
+report:{button:'report',idle:'Gerar relatório',busy:'Gerando…',title:'Gerando relatório',
+detail:'O Ollama está analisando as métricas e preparando o relatório de eficiência.'},
+question:{button:'ask',idle:'Perguntar',busy:'Respondendo…',title:'Consultando as rotas',
+detail:'O Ollama está preparando uma resposta fundamentada nos dados da solução.'}};
+function setAssistantLoading(active,path){const action=assistantActions[path];
+Object.values(assistantActions).forEach(item=>$(item.button).disabled=active);
+$('optimizationLoading').classList.toggle('hidden',!active);const button=$(action.button);
+button.innerHTML=active?`<span class="button-content"><span class="spinner"></span>`+
+`${action.busy}</span>`:action.idle;if(active){$('loadingTitle').textContent=action.title;
+$('loadingDetail').textContent=action.detail;
+$('optimizationLoading').setAttribute('aria-label',`${action.title} em andamento`)}}
+async function llmAction(path,body){if(!solutionId)return;setAssistantLoading(true,path);try{const data=await api(
 `/api/solutions/${solutionId}/${path}`,{method:'POST',body:JSON.stringify(body)});
 $('assistantPanel').classList.remove('hidden');$('assistantOutput').textContent=JSON.stringify(data,null,2)
-}catch(e){$('assistantPanel').classList.remove('hidden');$('assistantOutput').textContent=e.message}}
+}catch(e){$('assistantPanel').classList.remove('hidden');$('assistantOutput').textContent=e.message
+}finally{setAssistantLoading(false,path)}}
 $('optimize').onclick=optimize;$('instructions').onclick=()=>llmAction('instructions',{});
 $('report').onclick=()=>llmAction('report',{period:'diario'});$('ask').onclick=()=>
 llmAction('question',{question:$('question').value});loadScenarios().catch(e=>$('status').textContent=e.message);

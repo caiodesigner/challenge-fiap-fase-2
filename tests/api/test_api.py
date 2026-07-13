@@ -55,6 +55,12 @@ async def test_serves_ui_health_and_openapi(app: FastAPI) -> None:
     assert index.status_code == 200
     assert "Otimização de Rotas Médicas" in index.text
     assert "leaflet@1.9.4" in index.text
+    assert 'id="optimizationLoading"' in index.text
+    assert "Otimizando as rotas" in index.text
+    assert "setOptimizing(true)" in index.text
+    assert "Gerando instruções" in index.text
+    assert "Gerando relatório" in index.text
+    assert "setAssistantLoading(true,path)" in index.text
     assert health.json() == {"status": "ok"}
     assert openapi.json()["info"]["title"] == "Otimização de Rotas Médicas"
 
