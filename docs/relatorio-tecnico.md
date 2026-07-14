@@ -338,8 +338,7 @@ Nenhum teste depende de API externa ou segredo.
 2. incluir cenário crítico em uma futura matriz experimental;
 3. persistir soluções e mover execução para fila;
 4. adicionar autenticação e auditoria;
-5. provisionar a configuração Cloud Run e registrar evidências da implantação;
-6. gravar o vídeo seguindo o roteiro versionado.
+5. provisionar a configuração Cloud Run e registrar evidências da implantação.
 
 ## 15. Conclusão
 

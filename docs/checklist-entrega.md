@@ -49,13 +49,13 @@ aprovada, registrada por Caio, está em
 ## Vídeo
 
 - [x] Roteiro de até 15 minutos preparado.
-- [ ] Gravar demonstração do sistema.
-- [ ] Mostrar componentes e arquitetura.
-- [ ] Mostrar resultados do algoritmo genético.
-- [ ] Demonstrar integração com LLM.
-- [ ] Revisar áudio, imagem, duração e ausência de segredos.
-- [ ] Fazer upload no YouTube ou Vimeo.
-- [ ] Adicionar URL do vídeo ao README.
+- [x] Gravar demonstração do sistema.
+- [x] Mostrar componentes e arquitetura.
+- [x] Mostrar resultados do algoritmo genético.
+- [x] Demonstrar integração com LLM.
+- [x] Revisar áudio, imagem, duração e ausência de segredos.
+- [x] Fazer upload no YouTube ou Vimeo.
+- [x] Adicionar URL do vídeo ao README.
 
 ## Nuvem opcional
 
@@ -101,8 +101,8 @@ Conferir:
 - [ ] Nenhum arquivo `.env` ou chave foi versionado.
 - [ ] Worktree Git está limpo.
 
-## Links a preencher
+## Links da entrega
 
 - Repositório: `https://github.com/caiodesigner/challenge-fiap-fase-2`
-- Vídeo: **pendente**
+- Vídeo: `https://youtu.be/hlAF68vhlQU`
 - Implantação em nuvem: **configuração pronta; URL pendente de provisionamento**

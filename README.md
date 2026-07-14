@@ -69,12 +69,19 @@ API em `http://127.0.0.1:8000/docs`.
 Para validar somente o restante da aplicação sem inferência, use
 `LLM_PROVIDER=local python -m rotas_medicas.api`.
 
+## Vídeo de demonstração
+
+A demonstração completa do sistema está disponível no YouTube:
+
+- [Tech Challenge — Otimização de Rotas Médicas](https://youtu.be/hlAF68vhlQU)
+
 ## Entregáveis
 
 - [Relatório técnico consolidado](docs/relatorio-tecnico.md)
 - [Evolução do código-base de TSP](docs/evolucao-codigo-base.md)
 - [Arquitetura da solução](docs/arquitetura.md)
 - [Guia da API](docs/api.md)
+- [Vídeo de demonstração](https://youtu.be/hlAF68vhlQU)
 - [Roteiro do vídeo de demonstração](docs/roteiro-video.md)
 - [Validação final antes do vídeo](docs/demonstracao-final.md)
 - [Checklist de entrega](docs/checklist-entrega.md)
